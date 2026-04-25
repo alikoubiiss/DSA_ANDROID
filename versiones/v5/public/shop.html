@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda - v5 Estática</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50; /* Fondo más oscuro para el juego */
+            color: #ecf0f1;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar superior */
+        .navbar {
+            background-color: #1a252f;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .balance {
+            background-color: #f1c40f;
+            color: #2c3e50;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .logout {
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            text-decoration: underline;
+        }
+
+        /* Contenido principal */
+        .main-container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2.section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+            color: #ecf0f1;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .center-title {
+            text-align: center;
+        }
+
+        /* Grid de la tienda */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        /* Tarjeta de producto */
+        .product-card {
+            background-color: #34495e;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            /* Placeholder de torreta */
+            content: url('https://cdn-icons-png.flaticon.com/512/1155/1155097.png');
+            background-color: #2c3e50; /* Fondo detrás si hay transparencia */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .product-details {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 1.2em;
+            margin: 0 0 10px 0;
+            color: #3498db;
+        }
+
+        .product-price {
+            font-size: 1.1em;
+            color: #f1c40f;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer; /* En v5 es estático, pero simulamos que se puede clicar */
+        }
+        
+        /* En v5 (Estático), el botón no hace nada visualmente al hacer clic, es de muestra */
+        .buy-btn:hover {
+            background-color: #2ecc71;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="navbar-brand">Tower Defense Shop</div>
+        <div class="user-info">
+            <span>Soldado: <strong>Invitado_v5</strong></span>
+            <div class="balance">💰 500 Monedas</div>
+            <a href="login.html" class="logout">Salir</a>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="center-title">
+            <h2 class="section-title">Armamento Disponible</h2>
+        </div>
+        
+        <div class="shop-grid">
+            <!-- Producto 1 -->
+            <div class="product-card">
+                <img class="product-img" alt="Torreta Básica">
+                <div class="product-details">
+                    <h3 class="product-title">Torreta Básica</h3>
+                    <div class="product-price">100 Monedas</div>
+                    <button class="buy-btn" onclick="alert('Esta funcionalidad estática de la v5 aún no permite comprar.')">Comprar</button>
+                </div>
+            </div>
+
+            <!-- Producto 2 -->
+            <div class="product-card">
+                <img class="product-img" src="https://cdn-icons-png.flaticon.com/512/757/757827.png" alt="Torreta de Láser">
+                <div class="product-details">
+                    <h3 class="product-title">Torreta Láser</h3>
+                    <div class="product-price">250 Monedas</div>
+                    <button class="buy-btn" onclick="alert('Esta funcionalidad estática de la v5 aún no permite comprar.')">Comprar</button>
+                </div>
+            </div>
+
+            <!-- Producto 3 -->
+            <div class="product-card">
+                <img class="product-img" src="https://cdn-icons-png.flaticon.com/512/3255/3255234.png" alt="Torreta de Plasma">
+                <div class="product-details">
+                    <h3 class="product-title">Lanza-Plasma</h3>
+                    <div class="product-price">400 Monedas</div>
+                    <button class="buy-btn" onclick="alert('Esta funcionalidad estática de la v5 aún no permite comprar.')">Comprar</button>
+                </div>
+            </div>
+
+            <!-- Producto 4 -->
+            <div class="product-card">
+                <img class="product-img" src="https://cdn-icons-png.flaticon.com/512/860/860162.png" alt="Escudo">
+                <div class="product-details">
+                    <h3 class="product-title">Escudo Deflector</h3>
+                    <div class="product-price">150 Monedas</div>
+                    <button class="buy-btn" onclick="alert('Esta funcionalidad estática de la v5 aún no permite comprar.')">Comprar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
