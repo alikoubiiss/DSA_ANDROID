@@ -77,7 +77,7 @@ public class GameService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(RegisterCredentials credentials) {
-        if (credentials.getNombre() == null || credentials.getPassword() == null || credentials.getEmail() == null) {
+        if (credentials == null || credentials.getNombre() == null || credentials.getPassword() == null || credentials.getEmail() == null) {
             return Response.status(400).entity("Faltan datos obligatorios").build();
         }
         try {
@@ -107,18 +107,20 @@ public class GameService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(Credentials credentials) {
-        if (credentials.getNombre() == null || credentials.getPassword() == null) {
+        if (credentials == null || credentials.getNombre() == null || credentials.getPassword() == null) {
             return Response.status(400).entity("Faltan nombre o password").build();
         }
         try {
             User u = gm.LogIn(credentials.getNombre(), credentials.getPassword());
-            return Response.ok(u).build();
+            UserDTO userDTO = new UserDTO(u.getUsername(), null, u.getEmail());
+            return Response.ok(userDTO).build();
         } catch (FailedLoginException e) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build();
         } catch (Exception e) {
             return Response.status(500).entity("Error interno del servidor").build();
         }
     }
+
 
     @GET
     @Path("/users/{nombre}")
@@ -172,7 +174,7 @@ public class GameService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addObjectToUser(AddObject request) {
-        if (request.getNombre() == null || request.getObjectId() == null) {
+        if (request == null || request.getNombre() == null || request.getObjectId() == null) {
             return Response.status(400).entity("Falta 'nombre' o 'id del objeto'").build();
         }
         try {
@@ -190,7 +192,7 @@ public class GameService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response buyObject(AddObject request) {
-        if (request.getNombre() == null || request.getObjectId() == null) {
+        if (request == null || request.getNombre() == null || request.getObjectId() == null) {
             return Response.status(400).entity("Falta nombre o objectId").build();
         }
         try {

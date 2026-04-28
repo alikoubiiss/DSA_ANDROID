@@ -46,7 +46,7 @@ public class GameManagerImpl implements GameManager {
             this.eventos.add(new Evento("2", "Evento 2", "Torneo por equipos", "16-12-2025", "20-12-2025", ""));
             
             System.out.println("[DEBUG] Adding initial objects...");
-            
+
             addNewObjeto("Torreta Básica", "Daño: Medio | Cadencia: Media | Rango: Medio | Efecto: Ninguno", Objects.BASICA, 50);
             addNewObjeto("Torreta de Hielo", "Daño: Bajo | Cadencia: Media | Rango: Medio | Efecto: Ralentiza enemigos 50%", Objects.HIELO, 100);
             addNewObjeto("Torreta de Área", "Daño: Medio | Cadencia: Lenta | Rango: Grande | Efecto: Daño en área (AoE)", Objects.AOE, 150);
@@ -77,8 +77,8 @@ public class GameManagerImpl implements GameManager {
         ValidationUtils.validatePassword(password);
         ValidationUtils.validateEmail(email);
 
-        username = username.toLowerCase();
-        email = email.toLowerCase();
+        username = username.trim().toLowerCase();
+        email = email.trim().toLowerCase();
 
         if (users.containsKey(username)) {
             throw new UserAlreadyExistsException("El usuario '" + username + "' ya existe");
@@ -97,7 +97,8 @@ public class GameManagerImpl implements GameManager {
         ValidationUtils.validateNotEmpty(username, "username");
         ValidationUtils.validateNotEmpty(password, "password");
 
-        username = username.toLowerCase();
+        username = username.trim().toLowerCase();
+
         User u = users.get(username);
         if (u == null || !BCrypt.checkpw(password, u.getPassword())) {
             throw new FailedLoginException("Usuario o contraseña incorrectas");
@@ -133,7 +134,8 @@ public class GameManagerImpl implements GameManager {
     @Override
     public List<UserGameObject> getListObjects(String username) throws UserNotFoundException {
         ValidationUtils.validateNotEmpty(username, "username");
-        username = username.toLowerCase();
+        username = username.trim().toLowerCase();
+
         if (!users.containsKey(username)) {
             throw new UserNotFoundException("Usuario no encontrado: " + username);
         }
@@ -147,14 +149,25 @@ public class GameManagerImpl implements GameManager {
         ValidationUtils.validateNotEmpty(username, "username");
         ValidationUtils.validateNotEmpty(objectId, "objectId");
 
-        username = username.toLowerCase();
+        username = username.trim().toLowerCase();
+        objectId = objectId.trim();
+
         User u = users.get(username);
+
         if (u == null) throw new UserNotFoundException("Usuario no encontrado: " + username);
 
         GameObject o = objectsById.get(objectId);
         if (o == null) throw new ObjectNotFoundException("Objeto no encontrado: " + objectId);
 
-        userInventory.get(username).add(new UserGameObject(o, 1));
+        List<UserGameObject> inventory = userInventory.get(username);
+        for (UserGameObject userObject : inventory) {
+            if (userObject.getGameObject().getId().equals(objectId)) {
+                userObject.setCantidad(userObject.getCantidad() + 1);
+                return u;
+            }
+        }
+
+        inventory.add(new UserGameObject(o, 1));
         return u;
     }
 
@@ -164,8 +177,11 @@ public class GameManagerImpl implements GameManager {
         ValidationUtils.validateNotEmpty(username, "username");
         ValidationUtils.validateNotEmpty(objectId, "objectId");
 
-        username = username.toLowerCase();
+        username = username.trim().toLowerCase();
+        objectId = objectId.trim();
+
         User u = users.get(username);
+
         if (u == null) throw new UserNotFoundException("Usuario no encontrado: " + username);
 
         GameObject o = objectsById.get(objectId);
@@ -174,14 +190,23 @@ public class GameManagerImpl implements GameManager {
         if (u.getMonedas() < o.getPrecio()) throw new InsufficientFundsException("Saldo insuficiente");
 
         u.setMonedas(u.getMonedas() - o.getPrecio());
-        userInventory.get(username).add(new UserGameObject(o, 1));
+
+        List<UserGameObject> inventory = userInventory.get(username);
+        for (UserGameObject userObject : inventory) {
+            if (userObject.getGameObject().getId().equals(objectId)) {
+                userObject.setCantidad(userObject.getCantidad() + 1);
+                return u;
+            }
+        }
+
+        inventory.add(new UserGameObject(o, 1));
         return u;
     }
 
     @Override
     public User getUser(String username) {
         if (username == null) return null;
-        return users.get(username.toLowerCase());
+        return users.get(username.trim().toLowerCase());
     }
 
     @Override
@@ -212,7 +237,8 @@ public class GameManagerImpl implements GameManager {
     @Override
     public void addCoinsToUser(String username, int amount) throws UserNotFoundException {
         ValidationUtils.validateNotEmpty(username, "username");
-        username = username.toLowerCase();
+        ValidationUtils.validatePositive(amount, "amount");
+        username = username.trim().toLowerCase();
         User u = users.get(username);
         if (u == null) throw new UserNotFoundException("Usuario no encontrado: " + username);
         u.setMonedas(u.getMonedas() + amount);
@@ -221,8 +247,10 @@ public class GameManagerImpl implements GameManager {
     @Override
     public void updateUserProgress(String username, Integer actFrag, Integer bestScore) throws UserNotFoundException {
         ValidationUtils.validateNotEmpty(username, "username");
-        username = username.toLowerCase();
+        username = username.trim().toLowerCase();
+
         User u = users.get(username);
+
         if (u == null) throw new UserNotFoundException("Usuario no encontrado: " + username);
         if (actFrag != null) u.setActFrag(actFrag);
         if (bestScore != null && bestScore > u.getBestScore()) u.setBestScore(bestScore);
@@ -233,7 +261,9 @@ public class GameManagerImpl implements GameManager {
             throws UserNotFoundException, ObjectNotFoundException {
         ValidationUtils.validateNotEmpty(username, "username");
         ValidationUtils.validateNotEmpty(objectId, "objectId");
-        username = username.toLowerCase();
+
+        username = username.trim().toLowerCase();
+
         if (!users.containsKey(username)) throw new UserNotFoundException("Usuario no encontrado: " + username);
         if (!objectsById.containsKey(objectId)) throw new ObjectNotFoundException("Objeto no encontrado: " + objectId);
 
