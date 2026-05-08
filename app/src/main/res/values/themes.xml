@@ -1,16 +1,17 @@
-﻿<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.dsa_android" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Tema TowerDefense: verde #22C55E y dorado #FBBF24, fondo oscuro #0F172A -->
+    <style name="Theme.dsa_android" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary: verde TowerDefense -->
+        <item name="colorPrimary">#22C55E</item>
+        <item name="colorPrimaryVariant">#16A34A</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <!-- Secondary: dorado TowerDefense -->
+        <item name="colorSecondary">#FBBF24</item>
+        <item name="colorSecondaryVariant">#F59E0B</item>
+        <item name="colorOnSecondary">#0F172A</item>
+        <!-- Fondo oscuro -->
+        <item name="android:windowBackground">@drawable/tower_bg</item>
+        <item name="android:statusBarColor">#0F172A</item>
+        <item name="android:navigationBarColor">#0F172A</item>
     </style>
 </resources>

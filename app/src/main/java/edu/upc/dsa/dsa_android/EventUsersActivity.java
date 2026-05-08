@@ -1,4 +1,4 @@
-﻿package edu.upc.dsa.dsa_android;
+package edu.upc.dsa.dsa_android;
 
 import android.graphics.Color;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-﻿package edu.upc.dsa.dsa_android;
+package edu.upc.dsa.dsa_android;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -20,9 +20,6 @@ public class InicioLoginActivity extends AppCompatActivity {
 
     Button buttonTienda;
     Button buttonLogOut;
-    Button buttonInventario;
-    Button buttonExtras;
-
     Button buttonJugar;
 
     @SuppressLint("MissingInflatedId")
@@ -39,8 +36,6 @@ public class InicioLoginActivity extends AppCompatActivity {
         });
 
         buttonLogOut = findViewById(R.id.buttonLogOut);
-        buttonInventario = findViewById(R.id.buttonInventario);
-        buttonExtras = findViewById(R.id.buttonExtras);
         buttonTienda = findViewById(R.id.buttonTienda);
         buttonJugar = findViewById(R.id.buttonJugar);
 
@@ -57,15 +52,6 @@ public class InicioLoginActivity extends AppCompatActivity {
             finish();
         });
 
-        buttonInventario.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioLoginActivity.this, InventarioActivity.class);
-            startActivity(intent);
-        });
-
-        buttonExtras.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioLoginActivity.this, ExtrasActivity.class);
-            startActivity(intent);
-        });
 
         buttonTienda.setOnClickListener(v -> {
             Intent intent = new Intent(InicioLoginActivity.this, TiendaActivity.class);

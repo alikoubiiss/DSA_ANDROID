@@ -1,4 +1,4 @@
-﻿package edu.upc.dsa.dsa_android.network;
+package edu.upc.dsa.dsa_android.network;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

@@ -1,75 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+<!-- Tienda: réplica de shop.html del BackFront - header + lista de objetos -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TiendaActivity"
-    android:background="@drawable/fondo">
+    android:background="@drawable/tower_bg"
+    tools:context=".TiendaActivity">
 
-    <TextView
-            android:id="@+id/textViewTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:fontFamily="sans-serif-black"
-            android:text="TIENDA"
-            android:textColor="@android:color/white"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewMonedas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="#66000000"
-        android:fontFamily="sans-serif-medium"
-        android:paddingStart="12dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="4dp"
-        android:text="Monedas: 0"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+    <!-- Overlay oscuro -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#AA0F172A"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Header: logo + Tienda + monedas + Volver (réplica del header de shop.html) -->
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="#CC0F172A"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Logo pequeño -->
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/combined_logo"
+            android:scaleType="fitCenter" />
+
+        <!-- Título "Tienda" en blanco bold -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tienda"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="10dp" />
+
+        <!-- Monedas: icono + valor, estilo neon cyan del BackFront -->
+        <TextView
+            android:id="@+id/textViewMonedas"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:background="@drawable/td_input_bg"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="💰 ..."
+            android:textColor="#22D3EE"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Botón Volver -->
+        <Button
+            android:id="@+id/btnBackToInicioLogIn"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:background="@drawable/td_input_bg"
+            android:text="← Volver"
+            android:textColor="#EF4444"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp" />
+
+    </LinearLayout>
+
+    <!-- Banner título tienda con logo (réplica del h1 de shop.html) -->
+    <LinearLayout
+        android:id="@+id/bannerTienda"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/td_card_bg"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/combined_logo"
+            android:scaleType="fitCenter"
+            android:layout_marginEnd="12dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tienda"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bienvenido de nuevo,"
+                android:textSize="12sp"
+                android:textColor="#94A3B8" />
+
+            <TextView
+                android:id="@+id/textViewUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="..."
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#A78BFA" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- RecyclerView de objetos de la tienda -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTienda"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
         android:clipToPadding="false"
-        android:paddingBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnBackToInicioLogIn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewMonedas" />
-
-    <Button
-        android:id="@+id/btnBackToInicioLogIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="#009688"
-        android:text="Volver"
-        android:textColor="@android:color/white"
+        android:paddingBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/bannerTienda"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- ProgressBar central -->
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:indeterminate="true"
         android:visibility="gone"
         android:elevation="10dp"

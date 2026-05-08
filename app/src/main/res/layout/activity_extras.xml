@@ -1,112 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Extras: réplica del submenú de opciones del BackFront con estilo TowerDefense -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo"
+    android:background="@drawable/tower_bg"
     tools:context=".ExtrasActivity">
 
-    <Button
-        android:id="@+id/EquiposButton"
-        android:layout_width="180dp"
-        android:layout_height="80dp"
-        android:background="@drawable/button_neon_bg"
-        android:fontFamily="sans-serif-smallcaps"
-        android:shadowColor="#00FFFF"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="10"
-        android:text="EQUIPOS"
-        android:textColor="#FFFFFF"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintVertical_chainStyle="packed"
+    <!-- Overlay oscuro -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#AA0F172A"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/EventosButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/EventosButton"
-        android:layout_width="180dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/button_neon_bg"
-        android:fontFamily="sans-serif-smallcaps"
-        android:shadowColor="#00FFFF"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="10"
-        android:text="EVENTOS"
-        android:textColor="#FFFFFF"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/EquiposButton"
-        app:layout_constraintBottom_toTopOf="@+id/Participantesbutton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/Participantesbutton"
-        android:layout_width="180dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/button_neon_bg"
-        android:fontFamily="sans-serif-smallcaps"
-        android:shadowColor="#00FFFF"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="10"
-        android:text="PARTICIPANTES"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/EventosButton"
-        app:layout_constraintBottom_toTopOf="@+id/MyTeamButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/MyTeamButton"
-        android:layout_width="180dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/button_neon_bg"
-        android:fontFamily="sans-serif-smallcaps"
-        android:shadowColor="#00FFFF"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="10"
-        android:text="MI EQUIPO"
-        android:textColor="#FFFFFF"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/Participantesbutton"
-        app:layout_constraintBottom_toTopOf="@+id/btnVolver"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/btnVolver"
-        android:layout_width="180dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/button_neon_bg"
-        android:fontFamily="sans-serif-smallcaps"
-        android:shadowColor="#00FFFF"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="10"
-        android:text="VOLVER"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/MyTeamButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="#CC0F172A"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/combined_logo"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Extras"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FBBF24"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="10dp" />
+
+        <Button
+            android:id="@+id/btnVolver"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:background="@drawable/td_input_bg"
+            android:text="← Volver"
+            android:textColor="#EF4444"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp" />
+
+    </LinearLayout>
+
+    <!-- Contenedor central de botones -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="28dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- EQUIPOS: dorado/primary -->
+        <Button
+            android:id="@+id/EquiposButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/td_button_primary"
+            android:text="⚔️  EQUIPOS"
+            android:textColor="#0F172A"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="14dp" />
+
+        <!-- EVENTOS: verde -->
+        <Button
+            android:id="@+id/EventosButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/td_button_green"
+            android:text="📅  EVENTOS"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="14dp" />
+
+        <!-- PARTICIPANTES: card border dorado -->
+        <Button
+            android:id="@+id/Participantesbutton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/td_card_bg"
+            android:text="👥  PARTICIPANTES"
+            android:textColor="#FBBF24"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="14dp" />
+
+        <!-- MI EQUIPO: card border dorado -->
+        <Button
+            android:id="@+id/MyTeamButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/td_card_bg"
+            android:text="🛡️  MI EQUIPO"
+            android:textColor="#FBBF24"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

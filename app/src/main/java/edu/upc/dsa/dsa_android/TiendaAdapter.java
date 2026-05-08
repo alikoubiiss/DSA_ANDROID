@@ -1,4 +1,4 @@
-﻿package edu.upc.dsa.dsa_android;
+package edu.upc.dsa.dsa_android;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,6 +15,27 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
     private List<GameObject> gameObjects;
     private LayoutInflater inflater;
     private OnItemBuyClickListener buyClickListener;
+
+    // Mapa de emojis por tipo, igual que getIconForType() del BackFront common.js
+    private static String getEmojiForType(String tipo) {
+        if (tipo == null) return "📦";
+        switch (tipo.toUpperCase()) {
+            case "ESPADA":   return "⚔️";
+            case "ESCUDO":   return "🛡️";
+            case "POCION":   return "🧪";
+            case "ARMADURA": return "🦺";
+            case "ANILLO":   return "💍";
+            case "AMULETO":  return "💎";
+            case "ARCO":     return "🏹";
+            case "HACHA":    return "🪓";
+            case "LANZA":    return "🔱";
+            case "BASICA":   return "🎯";
+            case "HIELO":    return "❄️";
+            case "AOE":      return "💣";
+            case "SNIPER":   return "🔭";
+            default:         return "📦";
+        }
+    }
 
     public interface OnItemBuyClickListener {
         void onBuyClick(GameObject gameObject);
@@ -36,8 +57,10 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         GameObject gameObject = gameObjects.get(position);
+        holder.tvObjectIcon.setText(getEmojiForType(gameObject.getTipo()));
         holder.tvObjectName.setText(gameObject.getNombre());
-        holder.tvObjectPrice.setText("Precio: " + gameObject.getPrecio() + " monedas");
+        holder.tvObjectType.setText(gameObject.getTipo() != null ? gameObject.getTipo() : "");
+        holder.tvObjectPrice.setText("💰 " + gameObject.getPrecio());
 
         holder.btnComprar.setOnClickListener(v -> {
             if (buyClickListener != null) {
@@ -52,15 +75,19 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvObjectIcon;
         TextView tvObjectName;
+        TextView tvObjectType;
         TextView tvObjectPrice;
         Button btnComprar;
 
         ViewHolder(View itemView) {
             super(itemView);
-            tvObjectName = itemView.findViewById(R.id.textViewObjectName);
+            tvObjectIcon  = itemView.findViewById(R.id.textViewObjectIcon);
+            tvObjectName  = itemView.findViewById(R.id.textViewObjectName);
+            tvObjectType  = itemView.findViewById(R.id.textViewObjectType);
             tvObjectPrice = itemView.findViewById(R.id.textViewObjectPrice);
-            btnComprar = itemView.findViewById(R.id.btnComprar);
+            btnComprar    = itemView.findViewById(R.id.btnComprar);
         }
     }
 }

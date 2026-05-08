@@ -1,4 +1,4 @@
-﻿package edu.upc.dsa.dsa_android;
+package edu.upc.dsa.dsa_android;
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +33,7 @@ import retrofit2.Response;
 public class TiendaActivity extends AppCompatActivity {
     Button btnBackToInicioLogin;
     TextView tvMonedas;
+    TextView tvUsuario;
     RecyclerView recyclerViewTienda;
     TiendaAdapter adapter;
     SharedPreferences sharedPreferences;
@@ -58,9 +59,14 @@ public class TiendaActivity extends AppCompatActivity {
 
         btnBackToInicioLogin = findViewById(R.id.btnBackToInicioLogIn);
         tvMonedas = findViewById(R.id.textViewMonedas);
+        tvUsuario = findViewById(R.id.textViewUsuario);
         recyclerViewTienda = findViewById(R.id.recyclerViewTienda);
         recyclerViewTienda.setLayoutManager(new LinearLayoutManager(this));
         PB = findViewById(R.id.progressBar);
+
+        // Mostrar username en el banner (como el BackFront muestra "Bienvenido de nuevo, usuario")
+        String savedUsername = sharedPreferences.getString("username", "...");
+        if (tvUsuario != null) tvUsuario.setText(savedUsername);
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -225,6 +231,6 @@ public class TiendaActivity extends AppCompatActivity {
 
     private void actualizarMonedasUI() {
         int monedas = sharedPreferences.getInt("monedas", 0);
-        tvMonedas.setText("Monedas: " + monedas);
+        tvMonedas.setText("💰 " + monedas);
     }
 }

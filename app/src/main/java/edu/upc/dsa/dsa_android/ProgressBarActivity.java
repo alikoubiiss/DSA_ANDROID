@@ -1,4 +1,4 @@
-﻿package edu.upc.dsa.dsa_android;
+package edu.upc.dsa.dsa_android;
 import android.view.View;
 
 public class ProgressBarActivity {

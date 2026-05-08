@@ -1,4 +1,4 @@
-﻿package edu.upc.dsa.dsa_android.network;
+package edu.upc.dsa.dsa_android.network;
 
 import java.util.List;
 import edu.upc.dsa.dsa_android.CompraRequest;

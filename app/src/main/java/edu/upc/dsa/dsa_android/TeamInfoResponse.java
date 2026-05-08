@@ -1,4 +1,4 @@
-﻿package edu.upc.dsa.dsa_android;
+package edu.upc.dsa.dsa_android;
 
 import java.util.List;
 import edu.upc.dsa.dsa_android.User;
