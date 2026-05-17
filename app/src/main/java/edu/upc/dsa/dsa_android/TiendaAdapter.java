@@ -12,11 +12,10 @@ import java.util.List;
 
 public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder> {
 
-    private List<GameObject> gameObjects;
-    private LayoutInflater inflater;
-    private OnItemBuyClickListener buyClickListener;
+    private final List<Item> items;
+    private final LayoutInflater inflater;
+    private final OnItemBuyClickListener buyClickListener;
 
-    // Mapa de emojis por tipo, igual que getIconForType() del BackFront common.js
     private static String getEmojiForType(String tipo) {
         if (tipo == null) return "📦";
         switch (tipo.toUpperCase()) {
@@ -33,17 +32,23 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
             case "HIELO":    return "❄️";
             case "AOE":      return "💣";
             case "SNIPER":   return "🔭";
+            case "WEAPON":   return "⚔️";
+            case "ARMOR":    return "🦺";
+            case "POTION":   return "🧪";
+            case "RING":     return "💍";
+            case "BOOST":    return "⚡";
+            case "CONSUMABLE": return "🔧";
             default:         return "📦";
         }
     }
 
     public interface OnItemBuyClickListener {
-        void onBuyClick(GameObject gameObject);
+        void onBuyClick(Item item);
     }
 
-    public TiendaAdapter(Context context, List<GameObject> gameObjects, OnItemBuyClickListener listener) {
+    public TiendaAdapter(Context context, List<Item> items, OnItemBuyClickListener listener) {
         this.inflater = LayoutInflater.from(context);
-        this.gameObjects = gameObjects;
+        this.items = items;
         this.buyClickListener = listener;
     }
 
@@ -56,26 +61,47 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GameObject gameObject = gameObjects.get(position);
-        holder.tvObjectIcon.setText(getEmojiForType(gameObject.getTipo()));
-        holder.tvObjectName.setText(gameObject.getNombre());
-        holder.tvObjectType.setText(gameObject.getTipo() != null ? gameObject.getTipo() : "");
-        holder.tvObjectPrice.setText("💰 " + gameObject.getPrecio());
+        Item item = items.get(position);
+        holder.tvObjectName.setText(item.getName());
+        holder.tvObjectType.setText(item.getType() != null ? item.getType() : "");
+        holder.tvObjectPrice.setText("💰 " + String.format("%.0f", item.getPrice()));
+
+        // Cargar imagen local dinámica según el assetName
+        Context context = holder.itemView.getContext();
+        String asset = item.getAssetName();
+        int resId = 0;
+        if (asset != null && !asset.trim().isEmpty()) {
+            if (asset.endsWith(".png")) {
+                asset = asset.substring(0, asset.length() - 4);
+            }
+            resId = context.getResources().getIdentifier(asset, "drawable", context.getPackageName());
+        }
+
+        if (resId != 0) {
+            holder.ivObjectIcon.setImageResource(resId);
+        } else {
+            // Imagen por defecto si no se encuentra
+            holder.ivObjectIcon.setImageResource(R.drawable.combined_logo);
+        }
+
+        // Deshabilitar botón si el item no está disponible
+        holder.btnComprar.setEnabled(item.isAvailable());
+        holder.btnComprar.setAlpha(item.isAvailable() ? 1f : 0.4f);
 
         holder.btnComprar.setOnClickListener(v -> {
             if (buyClickListener != null) {
-                buyClickListener.onBuyClick(gameObject);
+                buyClickListener.onBuyClick(item);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return gameObjects.size();
+        return items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvObjectIcon;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        android.widget.ImageView ivObjectIcon;
         TextView tvObjectName;
         TextView tvObjectType;
         TextView tvObjectPrice;
@@ -83,7 +109,7 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
 
         ViewHolder(View itemView) {
             super(itemView);
-            tvObjectIcon  = itemView.findViewById(R.id.textViewObjectIcon);
+            ivObjectIcon  = itemView.findViewById(R.id.imageViewObjectIcon);
             tvObjectName  = itemView.findViewById(R.id.textViewObjectName);
             tvObjectType  = itemView.findViewById(R.id.textViewObjectType);
             tvObjectPrice = itemView.findViewById(R.id.textViewObjectPrice);

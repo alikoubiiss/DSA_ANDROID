@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         SharedPreferences sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
 
-        if (sharedPreferences.contains("username") && !sharedPreferences.getString("username", "").isEmpty()) {
+        if (sharedPreferences.contains("username") && !sharedPreferences.getString("username", "").isEmpty()
+                && sharedPreferences.getInt("userId", -1) != -1) {
 
             Intent intent = new Intent(MainActivity.this, InicioLoginActivity.class);
             startActivity(intent);

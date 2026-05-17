@@ -9,14 +9,15 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import edu.upc.dsa.dsa_android.network.RetrofitClient;
-import edu.upc.dsa.dsa_android.network.ApiService;
-
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
+import android.animation.ObjectAnimator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.Animator;
+import android.view.animation.DecelerateInterpolator;
 import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,13 +25,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import edu.upc.dsa.dsa_android.network.ApiService;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
+import edu.upc.dsa.dsa_android.network.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TiendaActivity extends AppCompatActivity {
+
     Button btnBackToInicioLogin;
     TextView tvMonedas;
     TextView tvUsuario;
@@ -38,15 +39,12 @@ public class TiendaActivity extends AppCompatActivity {
     TiendaAdapter adapter;
     SharedPreferences sharedPreferences;
     ProgressBar PB;
-
     ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         EdgeToEdge.enable(this);
-
         setContentView(R.layout.activity_tienda);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -58,179 +56,147 @@ public class TiendaActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
 
         btnBackToInicioLogin = findViewById(R.id.btnBackToInicioLogIn);
-        tvMonedas = findViewById(R.id.textViewMonedas);
-        tvUsuario = findViewById(R.id.textViewUsuario);
+        tvMonedas   = findViewById(R.id.textViewMonedas);
+        tvUsuario   = findViewById(R.id.textViewUsuario);
         recyclerViewTienda = findViewById(R.id.recyclerViewTienda);
         recyclerViewTienda.setLayoutManager(new LinearLayoutManager(this));
         PB = findViewById(R.id.progressBar);
 
-        // Mostrar username en el banner (como el BackFront muestra "Bienvenido de nuevo, usuario")
         String savedUsername = sharedPreferences.getString("username", "...");
         if (tvUsuario != null) tvUsuario.setText(savedUsername);
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(logging);
-
         apiService = RetrofitClient.getInstance().getApi();
 
-        actualizarMonedasUI();
+        actualizarSaldoUI();
         cargarTienda();
 
         btnBackToInicioLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(TiendaActivity.this, InicioLoginActivity.class);
-            startActivity(intent);
-            finish();
+            runLoadingAnimation(() -> {
+                startActivity(new Intent(TiendaActivity.this, InicioLoginActivity.class));
+                finish();
+            });
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        cargarDatosUsuario();
-    }
-
-    private void cargarDatosUsuario() {
-        String username = sharedPreferences.getString("username", null);
-        if (username == null) {
-            Toast.makeText(this, "Error: Sesión no iniciada", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ProgressBarActivity.show(PB);
-
-        Call<User> call = apiService.getUser(username);
-
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                ProgressBarActivity.hide(PB);
-
-                if (response.isSuccessful() && response.body() != null) {
-                    User usuarioActualizado = response.body();
-
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("monedas", usuarioActualizado.getMonedas());
-                    editor.apply();
-
-                    actualizarMonedasUI();
-                    Log.d("TiendaActivity", "Datos del usuario actualizados desde la API.");
-
-                } else {
-                    Log.e("TiendaActivity", "Error al cargar datos del usuario: " + response.code());
-                    actualizarMonedasUI();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                ProgressBarActivity.hide(PB);
-
-                Log.e("TiendaActivity", "Fallo de red al cargar datos del usuario.", t);
-                Toast.makeText(TiendaActivity.this, "Fallo de conexión. Mostrando datos locales.", Toast.LENGTH_SHORT)
-                        .show();
-                actualizarMonedasUI();
-            }
-        });
+        actualizarSaldoUI();
     }
 
     private void cargarTienda() {
         ProgressBarActivity.show(PB);
 
-        Call<List<GameObject>> call = apiService.getALLGameObjects();
-        call.enqueue(new Callback<List<GameObject>>() {
+        Call<List<Item>> call = apiService.getAllItems();
+        call.enqueue(new Callback<List<Item>>() {
             @Override
-            public void onResponse(Call<List<GameObject>> call, Response<List<GameObject>> response) {
+            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
                 ProgressBarActivity.hide(PB);
 
                 if (response.isSuccessful() && response.body() != null) {
-                    List<GameObject> objetos = response.body();
-
-                    // Configura el adaptador con la lista de objetos
-                    adapter = new TiendaAdapter(TiendaActivity.this, objetos, gameObject -> {
-                        // Lógica de compra al hacer clic en el botón
-                        handleCompra(gameObject);
-                    });
+                    List<Item> items = response.body();
+                    adapter = new TiendaAdapter(TiendaActivity.this, items, item -> handleCompra(item));
                     recyclerViewTienda.setAdapter(adapter);
-
                 } else {
-                    Toast.makeText(TiendaActivity.this, "Error cargando la tienda", Toast.LENGTH_SHORT).show();
-                    Log.e("TiendaActivity", "Error cargando tienda: " + response.code());
+                    Toast.makeText(TiendaActivity.this,
+                            "Error cargando la tienda: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Log.e("TiendaActivity", "Error: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<GameObject>> call, Throwable t) {
+            public void onFailure(Call<List<Item>> call, Throwable t) {
                 ProgressBarActivity.hide(PB);
-
-                Toast.makeText(TiendaActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e("TiendaActivity", "Error en onFailure al cargar tienda", t);
+                Toast.makeText(TiendaActivity.this,
+                        "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("TiendaActivity", "onFailure", t);
             }
         });
     }
 
-    private void handleCompra(GameObject item) {
-        SharedPreferences prefs = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
-        String username = prefs.getString("username", null);
-        if (username == null) {
+    private void handleCompra(Item item) {
+        int userId = sharedPreferences.getInt("userId", -1);
+        if (userId == -1) {
             Toast.makeText(this, "Error: Sesión no iniciada", Toast.LENGTH_LONG).show();
             return;
         }
 
-        String objectId = item.getId();
-        if (objectId == null) {
-            Toast.makeText(this, "Error: Objeto no encontrado", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        CompraRequest request = new CompraRequest(username, objectId);
+        BuyItemRequest request = new BuyItemRequest(item.getId(), 1);
 
         ProgressBarActivity.show(PB);
 
-        Call<User> call = apiService.comprarItem(request);
-
-        call.enqueue(new Callback<User>() {
+        Call<Purchase> call = apiService.buyItem(userId, request);
+        call.enqueue(new Callback<Purchase>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<Purchase> call, Response<Purchase> response) {
                 ProgressBarActivity.hide(PB);
 
                 if (response.isSuccessful() && response.body() != null) {
-                    User usuarioActualizado = response.body();
-                    Toast.makeText(TiendaActivity.this, item.getNombre() + " comprado con éxito!", Toast.LENGTH_SHORT)
-                            .show();
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putInt("monedas", usuarioActualizado.getMonedas());
+                    Purchase purchase = response.body();
+                    Toast.makeText(TiendaActivity.this,
+                            item.getName() + " comprado! Saldo restante: " +
+                            String.format("%.2f", purchase.getUserSaldo()),
+                            Toast.LENGTH_SHORT).show();
+
+                    // Actualizar saldo en SharedPreferences
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putFloat("saldo", (float) purchase.getUserSaldo());
                     editor.apply();
 
-                    actualizarMonedasUI();
+                    actualizarSaldoUI();
+
+                } else if (response.code() == 409) {
+                    Toast.makeText(TiendaActivity.this,
+                            "Saldo insuficiente", Toast.LENGTH_LONG).show();
+                } else if (response.code() == 404) {
+                    Toast.makeText(TiendaActivity.this,
+                            "Item o usuario no encontrado", Toast.LENGTH_LONG).show();
                 } else {
-                    String errorMessage = "Error " + response.code();
                     try {
-                        if (response.errorBody() != null) {
-                            errorMessage = response.errorBody().string();
-                        }
+                        String errorMsg = response.errorBody() != null
+                                ? response.errorBody().string() : "Error " + response.code();
+                        Toast.makeText(TiendaActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        Log.e("TiendaActivity", "Error al parsear el errorBody", e);
+                        Log.e("TiendaActivity", "Error parseando errorBody", e);
                     }
-                    Toast.makeText(TiendaActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                    Log.e("TiendaActivity", "Error en la compra: " + response.code() + " - " + errorMessage);
                 }
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<Purchase> call, Throwable t) {
                 ProgressBarActivity.hide(PB);
-
-                Toast.makeText(TiendaActivity.this, "Fallo de conexión:: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e("TiendaActivity", "Error en onFailure al comprar", t);
+                Toast.makeText(TiendaActivity.this,
+                        "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("TiendaActivity", "onFailure compra", t);
             }
         });
     }
 
-    private void actualizarMonedasUI() {
-        int monedas = sharedPreferences.getInt("monedas", 0);
-        tvMonedas.setText("💰 " + monedas);
+    private void actualizarSaldoUI() {
+        float saldo = sharedPreferences.getFloat("saldo", 0f);
+        tvMonedas.setText("💰 " + String.format("%.2f", saldo));
+    }
+
+    private void runLoadingAnimation(Runnable onCompleteAction) {
+        android.view.View loadingOverlay = findViewById(R.id.loadingOverlay);
+        ProgressBar progressBar = findViewById(R.id.horizontalProgressBar);
+        if (loadingOverlay != null && progressBar != null) {
+            progressBar.setProgress(0);
+            loadingOverlay.setVisibility(android.view.View.VISIBLE);
+
+            ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", 0, 100);
+            animator.setDuration(1200);
+            animator.setInterpolator(new DecelerateInterpolator());
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(android.animation.Animator animator2) {
+                    onCompleteAction.run();
+                    loadingOverlay.setVisibility(android.view.View.GONE);
+                }
+            });
+            animator.start();
+        } else {
+            onCompleteAction.run();
+        }
     }
 }

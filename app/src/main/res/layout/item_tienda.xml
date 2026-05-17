@@ -9,15 +9,14 @@
     android:background="@drawable/td_card_bg">
 
     <!-- Icono del objeto (zona icon como el BackFront) -->
-    <TextView
-        android:id="@+id/textViewObjectIcon"
+    <ImageView
+        android:id="@+id/imageViewObjectIcon"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:gravity="center"
-        android:text="⚔️"
-        android:textSize="26sp"
         android:background="@drawable/td_input_bg"
-        android:layout_marginEnd="12dp" />
+        android:layout_marginEnd="12dp"
+        android:padding="8dp"
+        android:scaleType="fitCenter" />
 
     <!-- Info: nombre + tipo + precio -->
     <LinearLayout

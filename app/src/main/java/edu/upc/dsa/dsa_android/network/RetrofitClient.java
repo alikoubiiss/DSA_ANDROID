@@ -7,7 +7,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "http://192.168.1.134:8080/dsaApp/";
+    // Para dispositivo físico (Tablet/Móvil): Usar la IP local del PC (192.168.1.131)
+    // El backend Grizzly sirve en http://192.168.1.131:8080/dsaApp/
+    private static final String BASE_URL = "http://192.168.1.131:8080/dsaApp/";
+
     private static RetrofitClient instance;
     private final ApiService apiService;
 

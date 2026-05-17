@@ -29,12 +29,11 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = members.get(position);
-        holder.tvName.setText(user.getName());
-        holder.tvPoints.setText(user.getPoints() + " pts");
+        holder.tvName.setText(user.getUsername());
+        holder.tvPoints.setText("Lvl " + user.getLevel());
 
-        if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
-            Picasso.get().load(user.getAvatar()).into(holder.ivAvatar);
-        }
+        // Avatar logic removed since User no longer has an avatar field
+
     }
 
     @Override

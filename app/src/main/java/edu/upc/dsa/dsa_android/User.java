@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class User {
 
     @SerializedName("id")
-    private String id;
+    private int id;
 
     @SerializedName("username")
     private String username;
@@ -16,17 +16,14 @@ public class User {
     @SerializedName("email")
     private String email;
 
-    @SerializedName("vidaInicial")
-    private int vidaInicial;
+    @SerializedName("saldo")
+    private double saldo;
 
-    @SerializedName("monedas")
-    private int monedas;
+    @SerializedName("permissions")
+    private String permissions;
 
-    @SerializedName("points")
-    private int points;
-
-    @SerializedName("avatar")
-    private String avatar;
+    @SerializedName("level")
+    private int level;
 
     public User() {
     }
@@ -37,24 +34,29 @@ public class User {
         this.email = email;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    // Alias para compatibilidad con código existente
     public String getNombre() {
         return username;
     }
 
     public void setNombre(String username) {
         this.username = username;
-    }
-
-    public String getName() {
-        return username;
     }
 
     public String getPassword() {
@@ -73,35 +75,36 @@ public class User {
         this.email = email;
     }
 
-    public int getVidaInicial() {
-        return vidaInicial;
+    public double getSaldo() {
+        return saldo;
     }
 
-    public void setVidaInicial(int vidaInicial) {
-        this.vidaInicial = vidaInicial;
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 
+    // Alias para compatibilidad (monedas → saldo como int)
     public int getMonedas() {
-        return monedas;
+        return (int) saldo;
     }
 
-    public void setMonedas(int monedas) {
-        this.monedas = monedas;
+    public String getPermissions() {
+        return permissions;
     }
 
-    public int getPoints() {
-        return points;
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public int getLevel() {
+        return level;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public boolean isAdmin() {
+        return "ADMIN".equalsIgnoreCase(permissions);
     }
 }

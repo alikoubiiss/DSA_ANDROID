@@ -11,10 +11,9 @@ import java.util.List;
 
 public class InventarioAdapter extends RecyclerView.Adapter<InventarioAdapter.ViewHolder> {
 
-    private List<GameObject> userObjects;
-    private LayoutInflater inflater;
+    private final List<InventoryEntry> entries;
+    private final LayoutInflater inflater;
 
-    // Mismo mapa de emojis que TiendaAdapter / BackFront common.js
     private static String getEmojiForType(String tipo) {
         if (tipo == null) return "📦";
         switch (tipo.toUpperCase()) {
@@ -31,13 +30,19 @@ public class InventarioAdapter extends RecyclerView.Adapter<InventarioAdapter.Vi
             case "HIELO":    return "❄️";
             case "AOE":      return "💣";
             case "SNIPER":   return "🔭";
+            case "WEAPON":   return "⚔️";
+            case "ARMOR":    return "🦺";
+            case "POTION":   return "🧪";
+            case "RING":     return "💍";
+            case "BOOST":    return "⚡";
+            case "CONSUMABLE": return "🔧";
             default:         return "📦";
         }
     }
 
-    public InventarioAdapter(Context context, List<GameObject> userObjects) {
+    public InventarioAdapter(Context context, List<InventoryEntry> entries) {
         this.inflater = LayoutInflater.from(context);
-        this.userObjects = userObjects;
+        this.entries = entries;
     }
 
     @NonNull
@@ -49,28 +54,44 @@ public class InventarioAdapter extends RecyclerView.Adapter<InventarioAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GameObject gameObject = userObjects.get(position);
-        holder.tvObjectIcon.setText(getEmojiForType(gameObject.getTipo()));
-        holder.tvObjectName.setText(gameObject.getNombre());
-        // textViewObjectDescription muestra el tipo del objeto (como el BackFront)
-        holder.tvObjectDescription.setText(gameObject.getTipo() != null ? gameObject.getTipo() : "");
-        holder.tvObjectQuantity.setText("x " + gameObject.getCantidad());
+        InventoryEntry entry = entries.get(position);
+        holder.tvObjectName.setText(entry.getNombre());
+        holder.tvObjectDescription.setText(entry.getItemDescription() != null ? entry.getItemDescription() : "ID item: " + entry.getItemId());
+        holder.tvObjectQuantity.setText("x " + entry.getQuantity());
+
+        // Cargar imagen local dinámica según el assetName
+        Context context = holder.itemView.getContext();
+        String asset = entry.getItemAssetName();
+        int resId = 0;
+        if (asset != null && !asset.trim().isEmpty()) {
+            if (asset.endsWith(".png")) {
+                asset = asset.substring(0, asset.length() - 4);
+            }
+            resId = context.getResources().getIdentifier(asset, "drawable", context.getPackageName());
+        }
+
+        if (resId != 0) {
+            holder.ivObjectIcon.setImageResource(resId);
+        } else {
+            // Imagen por defecto si no se encuentra
+            holder.ivObjectIcon.setImageResource(R.drawable.combined_logo);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return userObjects.size();
+        return entries.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvObjectIcon;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        android.widget.ImageView ivObjectIcon;
         TextView tvObjectName;
         TextView tvObjectDescription;
         TextView tvObjectQuantity;
 
         ViewHolder(View itemView) {
             super(itemView);
-            tvObjectIcon        = itemView.findViewById(R.id.textViewObjectIcon);
+            ivObjectIcon        = itemView.findViewById(R.id.imageViewObjectIcon);
             tvObjectName        = itemView.findViewById(R.id.textViewObjectName);
             tvObjectDescription = itemView.findViewById(R.id.textViewObjectDescription);
             tvObjectQuantity    = itemView.findViewById(R.id.textViewObjectQuantity);

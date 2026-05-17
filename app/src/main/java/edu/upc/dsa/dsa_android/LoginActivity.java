@@ -9,13 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import edu.upc.dsa.dsa_android.network.RetrofitClient;
-import edu.upc.dsa.dsa_android.network.ApiService;
-
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.upc.dsa.dsa_android.network.ApiService;
+import edu.upc.dsa.dsa_android.network.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,7 +21,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     EditText etUsername, etPassword;
-    Button btnLogin, btnBackToMain, btnExtras;
+    Button btnLogin, btnBackToMain;
     ApiService apiService;
     ProgressBar PB;
 
@@ -34,9 +32,8 @@ public class LoginActivity extends AppCompatActivity {
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLoginSubmit);
+        btnLogin   = findViewById(R.id.btnLoginSubmit);
         btnBackToMain = findViewById(R.id.btnBackToMain);
-
         PB = findViewById(R.id.progressBar);
 
         apiService = RetrofitClient.getInstance().getApi();
@@ -46,62 +43,62 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         });
-
-
     }
 
     private void handleLogin() {
-        String input = etUsername.getText().toString();
+        String username = etUsername.getText().toString().trim().toLowerCase();
         String password = etPassword.getText().toString();
 
-        if (input.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Introduce usuario y contraseña", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String inputMinuscula = input.toLowerCase();
-
-        Credentials credentials = new Credentials();
-        credentials.setNombre(inputMinuscula);
-        credentials.setPassword(password);
-
         ProgressBarActivity.show(PB);
 
-        Call<User> call = apiService.loginUser(credentials);
+        LoginRequest request = new LoginRequest(username, password);
+
+        Call<User> call = apiService.loginUser(request);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 ProgressBarActivity.hide(PB);
 
-                if (response.isSuccessful()) {
-
+                if (response.isSuccessful() && response.body() != null) {
                     User user = response.body();
-                    Toast.makeText(LoginActivity.this, "Sesión iniciada. ¡Bienvenido " + user.getNombre(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this,
+                            "¡Bienvenido " + user.getUsername() + "!", Toast.LENGTH_LONG).show();
 
-                    SharedPreferences sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                    editor.putString("username", user.getNombre().toLowerCase());
-                    editor.putInt("monedas", user.getMonedas());
-                    editor.putInt("vidaInicial", user.getVidaInicial());
+                    // Guardar sesión en SharedPreferences
+                    SharedPreferences prefs = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("username", user.getUsername());
+                    editor.putInt("userId", user.getId());
+                    editor.putFloat("saldo", (float) user.getSaldo());
+                    editor.putInt("level", user.getLevel());
+                    editor.putString("permissions", user.getPermissions());
                     editor.apply();
 
                     startActivity(new Intent(LoginActivity.this, InicioLoginActivity.class));
                     finish();
 
+                } else if (response.code() == 401) {
+                    Toast.makeText(LoginActivity.this,
+                            "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
                 } else {
-                    Log.e("LoginActivity", "Error onResponse: " + response.code());
-                    Toast.makeText(LoginActivity.this, "Error: Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
+                    Log.e("LoginActivity", "Error: " + response.code());
+                    Toast.makeText(LoginActivity.this,
+                            "Error " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 ProgressBarActivity.hide(PB);
-                Toast.makeText(LoginActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e("LoginActivity", "Error onFailure", t);
+                Toast.makeText(LoginActivity.this,
+                        "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("LoginActivity", "onFailure", t);
             }
         });
     }
 }
-

@@ -5,17 +5,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import edu.upc.dsa.dsa_android.network.RetrofitClient;
-import edu.upc.dsa.dsa_android.network.ApiService;
-
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import edu.upc.dsa.dsa_android.network.ApiService;
+import edu.upc.dsa.dsa_android.network.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,7 +21,7 @@ import retrofit2.Response;
 public class SignupActivity extends AppCompatActivity {
 
     EditText etUsuari, etEmail, etPassword, etRepeatPassword;
-    View strengthBar;
+    android.view.View strengthBar;
     Button btnSignUp, btnBackToMain;
     ApiService apiService;
     boolean showPass1 = false;
@@ -35,15 +33,16 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        etUsuari = findViewById(R.id.editUsuari);
-        etEmail = findViewById(R.id.editEmail);
-        etPassword = findViewById(R.id.EditPassword);
-        etRepeatPassword = findViewById(R.id.editPassword2);
-        strengthBar = findViewById(R.id.passwordStrengthBar);
-        btnSignUp = findViewById(R.id.SignUp);
-        btnBackToMain = findViewById(R.id.btnBackToMain);
+        etUsuari        = findViewById(R.id.editUsuari);
+        etEmail         = findViewById(R.id.editEmail);
+        etPassword      = findViewById(R.id.EditPassword);
+        etRepeatPassword= findViewById(R.id.editPassword2);
+        strengthBar     = findViewById(R.id.passwordStrengthBar);
+        btnSignUp       = findViewById(R.id.SignUp);
+        btnBackToMain   = findViewById(R.id.btnBackToMain);
+        PB              = findViewById(R.id.progressBar);
+
         apiService = RetrofitClient.getInstance().getApi();
-        PB = findViewById(R.id.progressBar);
 
         btnSignUp.setOnClickListener(v -> handleSignUp());
         btnBackToMain.setOnClickListener(v -> {
@@ -53,14 +52,17 @@ public class SignupActivity extends AppCompatActivity {
 
         etPassword.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { updateStrengthBar(s.toString()); }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateStrengthBar(s.toString());
+            }
             @Override public void afterTextChanged(android.text.Editable s) {}
         });
 
         etPassword.setOnTouchListener((v, event) -> {
             int right = 2;
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (event.getRawX() >= etPassword.getRight() - etPassword.getCompoundDrawables()[right].getBounds().width()) {
+                if (event.getRawX() >= etPassword.getRight()
+                        - etPassword.getCompoundDrawables()[right].getBounds().width()) {
                     togglePassword();
                     return true;
                 }
@@ -71,7 +73,8 @@ public class SignupActivity extends AppCompatActivity {
         etRepeatPassword.setOnTouchListener((v, event) -> {
             int right = 2;
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (event.getRawX() >= etRepeatPassword.getRight() - etRepeatPassword.getCompoundDrawables()[right].getBounds().width()) {
+                if (event.getRawX() >= etRepeatPassword.getRight()
+                        - etRepeatPassword.getCompoundDrawables()[right].getBounds().width()) {
                     togglePassword2();
                     return true;
                 }
@@ -81,12 +84,12 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void handleSignUp() {
-        String usuari = etUsuari.getText().toString();
-        String email = etEmail.getText().toString();
+        String usuari   = etUsuari.getText().toString().trim().toLowerCase();
+        String email    = etEmail.getText().toString().trim().toLowerCase();
         String password = etPassword.getText().toString();
-        String repeatPassword = etRepeatPassword.getText().toString();
+        String repeatPw = etRepeatPassword.getText().toString();
 
-        if (usuari.isEmpty() || email.isEmpty() || password.isEmpty() || repeatPassword.isEmpty()) {
+        if (usuari.isEmpty() || email.isEmpty() || password.isEmpty() || repeatPw.isEmpty()) {
             Toast.makeText(this, "Completa todos los campos.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -97,52 +100,53 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        if (!password.equals(repeatPassword)) {
+        if (!password.equals(repeatPw)) {
             Toast.makeText(this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (!isPasswordStrong(password)) {
-            Toast.makeText(this, "La contraseña debe tener mínimo 8 caracteres, mayúsculas, minúsculas y números.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,
+                    "La contraseña debe tener mínimo 8 caracteres, mayúsculas, minúsculas y números.",
+                    Toast.LENGTH_LONG).show();
             return;
         }
 
-        String emailMinuscula = email.toLowerCase();
-        String usuariMinuscula = usuari.toLowerCase();
-
-        Credentials credentials = new Credentials();
-        credentials.setNombre(usuariMinuscula);
-        credentials.setEmail(emailMinuscula);
-        credentials.setPassword(password);
+        // Construir la petición con los campos del nuevo backend
+        RegisterRequest request = new RegisterRequest(usuari, password, email);
 
         ProgressBarActivity.show(PB);
 
-        Call<User> call = apiService.registerUser(credentials);
+        Call<User> call = apiService.registerUser(request);
         call.enqueue(new Callback<User>() {
-            @Override public void onResponse(Call<User> call, Response<User> response) {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
                 ProgressBarActivity.hide(PB);
 
                 if (response.isSuccessful()) {
-                    Toast.makeText(SignupActivity.this, "Usuario registrado! Ya puedes iniciar sesión.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this,
+                            "Usuario registrado. ¡Ya puedes iniciar sesión!", Toast.LENGTH_LONG).show();
                     finish();
-                } else if (response.code() == 409) {
-                    Toast.makeText(SignupActivity.this, "Error: El usuario ya existe.", Toast.LENGTH_LONG).show();
-                } else if (response.code() == 410) {
-                    Toast.makeText(SignupActivity.this, "Error: El correo ya está registrado.", Toast.LENGTH_LONG).show();
+                } else if (response.code() == 400) {
+                    Toast.makeText(SignupActivity.this,
+                            "Error: Datos inválidos o usuario ya existente.", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(SignupActivity.this, "Error desconocido en el registro.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this,
+                            "Error desconocido: " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
-            @Override public void onFailure(Call<User> call, Throwable t) {
-                ProgressBarActivity.hide(PB);
 
-                Toast.makeText(SignupActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                ProgressBarActivity.hide(PB);
+                Toast.makeText(SignupActivity.this,
+                        "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private boolean isPasswordStrong(String password) {
-        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$";
+        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(\\S+$).{8,}$";
         return password.matches(regex);
     }
 
