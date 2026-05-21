@@ -1,5 +1,7 @@
 package edu.upc.dsa.dsa_android.network;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -7,9 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    // Para dispositivo físico (Tablet/Móvil): Usar la IP local del PC (192.168.1.131)
-    // El backend Grizzly sirve en http://192.168.1.131:8080/dsaApp/
-    private static final String BASE_URL = "http://192.168.1.131:8080/dsaApp/";
+    private static final String BASE_URL = "https://dsa3.upc.edu/dsaApp/";
 
     private static RetrofitClient instance;
     private final ApiService apiService;
@@ -19,6 +19,9 @@ public class RetrofitClient {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(logging)
                 .build();
 
