@@ -146,7 +146,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordStrong(String password) {
-        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(\\S+$).{8,}$";
+        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])\\S{8,}$";
         return password.matches(regex);
     }
 
