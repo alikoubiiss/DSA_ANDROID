@@ -1,75 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#6B009688"
-    android:backgroundTint="#77009688"
-    android:padding="12dp">
+    android:orientation="vertical"
+    android:background="@drawable/bg_dark_card"
+    android:padding="14dp"
+    android:layout_marginBottom="12dp">
 
     <ImageView
         android:id="@+id/eventImage"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:src="@drawable/combined_logo"
+        android:contentDescription="Imagen del evento" />
 
     <TextView
         android:id="@+id/eventName"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-smallcaps"
-        android:maxLines="1"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/eventImage"
-        app:layout_constraintTop_toTopOf="@id/eventImage" />
+        android:layout_marginTop="12dp"
+        tools:text="Torneo de Torres" />
 
     <TextView
         android:id="@+id/eventDescription"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/eventName"
-        app:layout_constraintTop_toBottomOf="@id/eventName" />
-
-    <TextView
-        android:id="@+id/eventStartDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:textColor="#CBD5E1"
+        android:textSize="14sp"
         android:layout_marginTop="6dp"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/eventName"
-        app:layout_constraintTop_toBottomOf="@id/eventDescription" />
+        tools:text="Compite durante tres días y consigue puntos extra para tu equipo." />
 
-    <TextView
-        android:id="@+id/eventEndDate"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/eventName"
-        app:layout_constraintTop_toBottomOf="@id/eventStartDate" />
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/eventStartDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FBBF24"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="Inicio: 2026-06-02" />
+
+        <TextView
+            android:id="@+id/eventEndDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FBBF24"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:gravity="end"
+            tools:text="Fin: 2026-06-05" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/eventButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#009688"
-        android:text="Inscribirse"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventEndDate" />
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="INSCRIBIRSE"
+        android:textColor="#0F172A"
+        android:textStyle="bold"
+        android:background="@drawable/td_button_primary"
+        android:layout_marginTop="12dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

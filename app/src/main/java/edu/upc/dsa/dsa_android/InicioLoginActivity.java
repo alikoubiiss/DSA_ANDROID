@@ -29,6 +29,7 @@ public class InicioLoginActivity extends AppCompatActivity {
     Button buttonJugar;
     Button buttonInventario;
     Button buttonJugadores;
+    Button buttonExtras;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -48,6 +49,7 @@ public class InicioLoginActivity extends AppCompatActivity {
         buttonJugar = findViewById(R.id.buttonJugar);
         buttonInventario = findViewById(R.id.buttonInventario);
         buttonJugadores = findViewById(R.id.buttonJugadores);
+        buttonExtras = findViewById(R.id.buttonExtras);
 
         buttonLogOut.setOnClickListener(v -> {
             runLoadingAnimation(() -> {
@@ -75,6 +77,11 @@ public class InicioLoginActivity extends AppCompatActivity {
 
         buttonJugadores.setOnClickListener(v -> {
             Intent intent = new Intent(InicioLoginActivity.this, RankingActivity.class);
+            runLoadingAnimation(() -> startActivity(intent));
+        });
+
+        buttonExtras.setOnClickListener(v -> {
+            Intent intent = new Intent(InicioLoginActivity.this, ExtrasActivity.class);
             runLoadingAnimation(() -> startActivity(intent));
         });
 

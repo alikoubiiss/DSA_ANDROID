@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoViewHolder> {
@@ -20,13 +22,18 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
     }
 
     private final Context context;
-    private final List<Evento> eventos;
+    private List<Evento> eventos;
     private final OnInscribirseClick listener;
 
     public EventoAdapter(Context context, List<Evento> eventos, OnInscribirseClick listener) {
         this.context = context;
         this.eventos = eventos;
         this.listener = listener;
+    }
+
+    public void setEventos(List<Evento> eventos) {
+        this.eventos = eventos;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -42,29 +49,25 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
 
         holder.nombre.setText(evento.getName());
         holder.descripcion.setText(evento.getDescription());
-        holder.fechaInicio.setText(evento.getStartDate());
-        holder.fechaFin.setText(evento.getEndDate());
+        holder.fechaInicio.setText("Inicio: " + evento.getStartDate());
+        holder.fechaFin.setText("Fin: " + evento.getEndDate());
 
-        int resId = context.getResources().getIdentifier(
-                "evento_" + evento.getId(),
-                "drawable",
-                context.getPackageName()
-        );
-
-        if (resId != 0) {
-            holder.imagen.setImageResource(resId);
-        } else {
-            holder.imagen.setImageResource(android.R.color.transparent);
-        }
+        Picasso.get()
+                .load(evento.getImage())
+                .placeholder(R.drawable.combined_logo)
+                .error(R.drawable.combined_logo)
+                .into(holder.imagen);
 
         holder.inscribirseBtn.setOnClickListener(v -> {
-            if (listener != null) listener.onClick(evento);
+            if (listener != null) {
+                listener.onClick(evento);
+            }
         });
     }
 
     @Override
     public int getItemCount() {
-        return eventos.size();
+        return eventos != null ? eventos.size() : 0;
     }
 
     public static class EventoViewHolder extends RecyclerView.ViewHolder {
@@ -78,6 +81,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
 
         public EventoViewHolder(@NonNull View itemView) {
             super(itemView);
+
             imagen = itemView.findViewById(R.id.eventImage);
             nombre = itemView.findViewById(R.id.eventName);
             descripcion = itemView.findViewById(R.id.eventDescription);

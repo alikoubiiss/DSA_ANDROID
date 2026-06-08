@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,7 +9,7 @@
     android:background="@drawable/tower_bg"
     tools:context=".InicioLoginActivity">
 
-    <!-- Overlay oscuro general (opcional, para dar más contraste) -->
+    <!-- Overlay oscuro general (opcional, para dar mÃ¡s contraste) -->
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -44,7 +44,7 @@
             android:clipToOutline="true"
             android:layout_marginBottom="16dp" />
 
-        <!-- Título -->
+        <!-- TÃ­tulo -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
-        <!-- Subtítulo -->
+        <!-- SubtÃ­tulo -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                 android:layout_marginStart="8dp" />
         </LinearLayout>
 
-        <!-- Botón Inventario (Debajo, centrado) -->
+        <!-- BotÃ³n Inventario (Debajo, centrado) -->
         <Button
             android:id="@+id/buttonInventario"
             android:layout_width="match_parent"
@@ -115,14 +115,24 @@
             android:text="INVENTARIO"
             android:textColor="#0F172A"
             android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/buttonExtras"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/btn_yellow_solid"
+            android:text="EXTRAS"
+            android:textColor="#0F172A"
+            android:textStyle="bold"
             android:layout_marginBottom="24dp" />
 
-        <!-- Cerrar Sesión (Link) -->
+        <!-- Cerrar SesiÃ³n (Link) -->
         <TextView
             android:id="@+id/buttonLogOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cerrar sesión"
+            android:text="Cerrar sesiÃ³n"
             android:textColor="#94A3B8"
             android:textSize="14sp"
             android:padding="8dp"
@@ -179,3 +189,4 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
