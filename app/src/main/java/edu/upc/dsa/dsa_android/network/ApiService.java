@@ -11,6 +11,7 @@ import edu.upc.dsa.dsa_android.Purchase;
 import edu.upc.dsa.dsa_android.RegisterRequest;
 import edu.upc.dsa.dsa_android.RegistroEventoRequest;
 import edu.upc.dsa.dsa_android.User;
+import edu.upc.dsa.dsa_android.TeamInfoResponse;
 import okhttp3.ResponseBody;
 
 import retrofit2.Call;
@@ -75,4 +76,7 @@ public interface ApiService {
             @Path("eventId") int eventId,
             @Body RegistroEventoRequest request
     );
+
+    @GET("game/user/{username}/team")
+    Call<TeamInfoResponse> getMyTeamInfo(@Path("username") String username);
 }

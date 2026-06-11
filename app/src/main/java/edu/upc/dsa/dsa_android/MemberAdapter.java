@@ -9,13 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import java.util.List;
-import edu.upc.dsa.dsa_android.User;
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
 
-    private List<User> members;
+    private List<TeamMember> members;
 
-    public MemberAdapter(List<User> members) {
+    public MemberAdapter(List<TeamMember> members) {
         this.members = members;
     }
 
@@ -28,12 +27,20 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = members.get(position);
-        holder.tvName.setText(user.getUsername());
-        holder.tvPoints.setText("Lvl " + user.getLevel());
+        TeamMember member = members.get(position);
+        holder.tvName.setText(member.getName());
+        holder.tvPoints.setText(member.getPoints() + " pts");
 
-        // Avatar logic removed since User no longer has an avatar field
-
+        // Load avatar using Picasso
+        if (member.getAvatar() != null && !member.getAvatar().trim().isEmpty()) {
+            Picasso.get()
+                   .load(member.getAvatar())
+                   .placeholder(R.mipmap.ic_launcher_round)
+                   .error(R.mipmap.ic_launcher_round)
+                   .into(holder.ivAvatar);
+        } else {
+            holder.ivAvatar.setImageResource(R.mipmap.ic_launcher_round);
+        }
     }
 
     @Override

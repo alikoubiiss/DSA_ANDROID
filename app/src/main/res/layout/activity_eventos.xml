@@ -1,83 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/tower_bg"
-    tools:context=".EventosActivity">
+    android:layout_height="match_parent">
 
-    <View
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#D9000000" />
+        android:src="@drawable/tower_bg"
+        android:scaleType="centerCrop" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="18dp">
-
-        <TextView
-            android:id="@+id/textViewEventosTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Eventos"
-            android:textColor="#FBBF24"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="6dp" />
-
-        <TextView
-            android:id="@+id/textViewEventosSubtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Inscríbete en los desafíos disponibles"
-            android:textColor="#CBD5E1"
-            android:textSize="15sp"
-            android:gravity="center"
-            android:layout_marginBottom="14dp" />
-
-        <ProgressBar
-            android:id="@+id/progressBarEventos"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:indeterminate="true"
-            android:layout_marginBottom="10dp" />
-
-        <TextView
-            android:id="@+id/textViewEventosError"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="No se pudieron cargar los eventos"
-            android:textColor="#FF6B6B"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:visibility="gone"
-            android:layout_marginBottom="10dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewEvents"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"
-            android:paddingBottom="12dp" />
-
-        <Button
-            android:id="@+id/btnVolver"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:text="VOLVER"
-            android:textColor="#0F172A"
-            android:textStyle="bold"
-            android:background="@drawable/td_button_primary" />
-
-    </LinearLayout>
-
+    <FrameLayout android:id="@+id/main" android:layout_width="match_parent" android:layout_height="match_parent" tools:context=".EventosActivity"> <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="#D9000000" /> <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="18dp"> <TextView android:id="@+id/textViewEventosTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Eventos" android:textColor="#FBBF24" android:textSize="28sp" android:textStyle="bold" android:gravity="center" android:layout_marginTop="18dp" android:layout_marginBottom="6dp" /> <TextView android:id="@+id/textViewEventosSubtitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Inscríbete en los desafíos disponibles" android:textColor="#CBD5E1" android:textSize="15sp" android:gravity="center" android:layout_marginBottom="14dp" /> <ProgressBar android:id="@+id/progressBarEventos" android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="center" android:visibility="gone" android:indeterminate="true" android:layout_marginBottom="10dp" /> <TextView android:id="@+id/textViewEventosError" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="No se pudieron cargar los eventos" android:textColor="#FF6B6B" android:textSize="16sp" android:textStyle="bold" android:gravity="center" android:visibility="gone" android:layout_marginBottom="10dp" /> <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerViewEvents" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:clipToPadding="false" android:paddingBottom="12dp" /> <Button android:id="@+id/btnVolver" android:layout_width="match_parent" android:layout_height="52dp" android:text="VOLVER" android:textColor="#0F172A" android:textStyle="bold" android:background="@drawable/td_button_primary" /> </LinearLayout> </FrameLayout>
 </FrameLayout>

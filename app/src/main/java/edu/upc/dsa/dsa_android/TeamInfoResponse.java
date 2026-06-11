@@ -1,11 +1,10 @@
 package edu.upc.dsa.dsa_android;
 
 import java.util.List;
-import edu.upc.dsa.dsa_android.User;
 
 public class TeamInfoResponse {
     private String team;
-    private List<User> members;
+    private List<TeamMember> members;
 
     public TeamInfoResponse() {}
 
@@ -17,11 +16,11 @@ public class TeamInfoResponse {
         this.team = team;
     }
 
-    public List<User> getMembers() {
+    public List<TeamMember> getMembers() {
         return members;
     }
 
-    public void setMembers(List<User> members) {
+    public void setMembers(List<TeamMember> members) {
         this.members = members;
     }
 }
