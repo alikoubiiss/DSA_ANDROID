@@ -22,8 +22,8 @@ public class InicioLoginActivity extends AppCompatActivity {
     Button buttonLogOut;
     Button buttonInventario;
     Button buttonExtras;
-
     Button buttonJugar;
+    Button buttonForo;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -43,6 +43,7 @@ public class InicioLoginActivity extends AppCompatActivity {
         buttonExtras = findViewById(R.id.buttonExtras);
         buttonTienda = findViewById(R.id.buttonTienda);
         buttonJugar = findViewById(R.id.buttonJugar);
+        buttonForo = findViewById(R.id.buttonForo);
 
 
         buttonLogOut.setOnClickListener(v -> {
@@ -99,6 +100,11 @@ public class InicioLoginActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Error: No hay usuario logueado", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        buttonForo.setOnClickListener(v -> {
+            Intent intent = new Intent(InicioLoginActivity.this, ForumActivity.class);
+            startActivity(intent);
         });
     }
 }

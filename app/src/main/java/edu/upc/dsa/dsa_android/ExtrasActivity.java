@@ -21,6 +21,7 @@ public class ExtrasActivity extends AppCompatActivity {
     Button MyTeamButton;
     Button FaqButton;
     Button btnVolver;
+    Button ForoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class ExtrasActivity extends AppCompatActivity {
         MyTeamButton = findViewById(R.id.MyTeamButton);
         FaqButton = findViewById(R.id.FaqButton);
         btnVolver = findViewById(R.id.btnVolver);
+        ForoButton = findViewById(R.id.ForoButton);
 
         EquiposButton.setOnClickListener(v ->
                 runLoadingAnimation(() -> startActivity(new Intent(ExtrasActivity.this, RankingActivity.class)))
@@ -47,6 +49,10 @@ public class ExtrasActivity extends AppCompatActivity {
 
         FaqButton.setOnClickListener(v ->
                 runLoadingAnimation(() -> startActivity(new Intent(ExtrasActivity.this, FaqAssistantActivity.class)))
+        );
+
+        ForoButton.setOnClickListener(v ->
+                runLoadingAnimation(() -> startActivity(new Intent(ExtrasActivity.this, ForumActivity.class)))
         );
 
         btnVolver.setOnClickListener(v -> runLoadingAnimation(this::finish));

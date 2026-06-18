@@ -122,6 +122,18 @@
             android:text="🛡️  MI EQUIPO"
             android:textColor="#FBBF24"
             android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="14dp" />
+
+        <!-- FORO: card border dorado -->
+        <Button
+            android:id="@+id/ForoButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/td_card_bg"
+            android:text="💬  FORO"
+            android:textColor="#FBBF24"
+            android:textStyle="bold"
             android:textSize="16sp" />
 
     </LinearLayout>

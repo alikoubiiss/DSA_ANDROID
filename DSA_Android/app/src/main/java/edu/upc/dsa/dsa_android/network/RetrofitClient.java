@@ -9,7 +9,7 @@ public class RetrofitClient {
 
     // Mismo servidor que Swagger (p. ej. .../dsaApp/swagger.json en el navegador).
     // Retrofit usa la raíz de la API (/dsaApp/); los paths están en ApiService (game/users/login, etc.).
-    private static final String BASE_URL_RAW = "http://192.168.10.24:8080/dsaApp/";
+    private static final String BASE_URL_RAW = "http://192.168.1.107:8080/dsaApp/";
 
     private static RetrofitClient instance;
     private final ApiService apiService;
