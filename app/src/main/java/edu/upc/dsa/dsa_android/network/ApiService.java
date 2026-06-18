@@ -15,6 +15,7 @@ import edu.upc.dsa.dsa_android.RegistroEventoRequest;
 import edu.upc.dsa.dsa_android.User;
 import edu.upc.dsa.dsa_android.UserEvent;
 import edu.upc.dsa.dsa_android.TeamInfoResponse;
+import edu.upc.dsa.dsa_android.Team;
 import okhttp3.ResponseBody;
 
 import retrofit2.Call;
@@ -90,4 +91,14 @@ public interface ApiService {
     /** POST /game/assistant/faq */
     @POST("game/assistant/faq")
     Call<FaqAssistantResponse> askFaq(@Body FaqAssistantRequest request);
+
+    @GET("teams/ranking")
+    Call<List<Team>> getTeamsRanking();
+
+    @PUT("teams/join/{teamName}/{userName}")
+    Call<Team> joinTeam(@Path("teamName") String teamName, @Path("userName") String userName);
+
+    @DELETE("teams/leave/{userName}")
+    Call<Void> leaveTeam(@Path("userName") String userName);
 }
+

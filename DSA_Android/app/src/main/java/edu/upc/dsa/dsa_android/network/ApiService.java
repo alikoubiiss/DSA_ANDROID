@@ -13,11 +13,13 @@ import edu.upc.dsa.dsa_android.TeamInfoResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+
 
 public interface ApiService {
 
@@ -56,4 +58,7 @@ public interface ApiService {
 
     @GET("teams/user/{userName}/team")
     Call<TeamInfoResponse> getMyTeamInfo(@Path("userName") String userName);
-}
+
+    @DELETE("teams/leave/{userName}")
+    Call<Void> leaveTeam(@Path("userName") String userName);
+}
