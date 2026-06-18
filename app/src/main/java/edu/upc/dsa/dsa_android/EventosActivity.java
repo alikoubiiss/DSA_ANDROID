@@ -1,6 +1,7 @@
 package edu.upc.dsa.dsa_android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -162,42 +163,10 @@ public class EventosActivity extends AppCompatActivity {
     }
 
     private void loadEventUsers(Evento evento) {
-        adapter.setExpandedEvent(evento.getId());
-        adapter.setLoadingUsers(evento.getId(), true);
-
-        Call<List<UserEvent>> call = apiService.getEventUsers(evento.getId());
-
-        call.enqueue(new Callback<List<UserEvent>>() {
-            @Override
-            public void onResponse(Call<List<UserEvent>> call, Response<List<UserEvent>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    adapter.setEventUsers(evento.getId(), response.body());
-                } else if (response.code() == 404) {
-                    adapter.setLoadingUsers(evento.getId(), false);
-                    adapter.collapseExpandedEvent();
-                    Toast.makeText(EventosActivity.this,
-                            "Evento no encontrado",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Log.e("EventosActivity", "Error getEventUsers: " + response.code());
-                    adapter.setLoadingUsers(evento.getId(), false);
-                    adapter.collapseExpandedEvent();
-                    Toast.makeText(EventosActivity.this,
-                            "Error cargando inscritos: " + response.code(),
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<UserEvent>> call, Throwable t) {
-                Log.e("EventosActivity", "onFailure getEventUsers", t);
-                adapter.setLoadingUsers(evento.getId(), false);
-                adapter.collapseExpandedEvent();
-                Toast.makeText(EventosActivity.this,
-                        "Fallo al cargar inscritos: " + t.getMessage(),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+        Intent intent = new Intent(this, EventUsersActivity.class);
+        intent.putExtra("eventId", evento.getId());
+        intent.putExtra("eventName", evento.getName());
+        startActivity(intent);
     }
 
     private void showLoading() {
