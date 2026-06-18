@@ -40,6 +40,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-livedata:2.8.7")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

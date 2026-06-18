@@ -3,7 +3,10 @@ package edu.upc.dsa.dsa_android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import edu.upc.dsa.dsa_android.Faq.FaqAssistantActivity;
 
 public class ExtrasActivity extends AppCompatActivity {
 
@@ -11,6 +14,7 @@ public class ExtrasActivity extends AppCompatActivity {
     Button EventosButton;
     Button Participantesbutton;
     Button MyTeamButton;
+    Button FaqButton;
     Button btnVolver;
 
     @Override
@@ -22,6 +26,7 @@ public class ExtrasActivity extends AppCompatActivity {
         EventosButton = findViewById(R.id.EventosButton);
         Participantesbutton = findViewById(R.id.Participantesbutton);
         MyTeamButton = findViewById(R.id.MyTeamButton);
+        FaqButton = findViewById(R.id.FaqButton);
         btnVolver = findViewById(R.id.btnVolver);
 
         EquiposButton.setOnClickListener(v ->
@@ -38,6 +43,10 @@ public class ExtrasActivity extends AppCompatActivity {
 
         MyTeamButton.setOnClickListener(v ->
                 startActivity(new Intent(ExtrasActivity.this, MyTeamActivity.class))
+        );
+
+        FaqButton.setOnClickListener(v ->
+                startActivity(new Intent(ExtrasActivity.this, FaqAssistantActivity.class))
         );
 
         btnVolver.setOnClickListener(v -> {

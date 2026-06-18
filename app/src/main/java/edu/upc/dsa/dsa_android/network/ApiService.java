@@ -4,6 +4,8 @@ import java.util.List;
 
 import edu.upc.dsa.dsa_android.BuyItemRequest;
 import edu.upc.dsa.dsa_android.Evento;
+import edu.upc.dsa.dsa_android.Faq.FaqAssistantRequest;
+import edu.upc.dsa.dsa_android.Faq.FaqAssistantResponse;
 import edu.upc.dsa.dsa_android.InventoryEntry;
 import edu.upc.dsa.dsa_android.Item;
 import edu.upc.dsa.dsa_android.LoginRequest;
@@ -84,4 +86,8 @@ public interface ApiService {
 
     @GET("game/user/{username}/team")
     Call<TeamInfoResponse> getMyTeamInfo(@Path("username") String username);
+
+    /** POST /game/assistant/faq */
+    @POST("game/assistant/faq")
+    Call<FaqAssistantResponse> askFaq(@Body FaqAssistantRequest request);
 }

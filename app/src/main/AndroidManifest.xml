@@ -61,6 +61,10 @@
             android:name=".MyTeamActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".Faq.FaqAssistantActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
