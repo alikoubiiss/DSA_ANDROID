@@ -59,7 +59,7 @@ public class EventosActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
         apiService = RetrofitClient.getInstance().getApi();
 
-        adapter = new EventoAdapter(this, new ArrayList<>(), this::registerToEvent);
+        adapter = new EventoAdapter(this, new ArrayList<>(), this::registerToEvent, this::loadEventUsers);
         recyclerViewEvents.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewEvents.setAdapter(adapter);
 
@@ -156,6 +156,45 @@ public class EventosActivity extends AppCompatActivity {
                 Log.e("EventosActivity", "onFailure registerToEvent", t);
                 Toast.makeText(EventosActivity.this,
                         "Fallo al inscribirse: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void loadEventUsers(Evento evento) {
+        adapter.setExpandedEvent(evento.getId());
+        adapter.setLoadingUsers(evento.getId(), true);
+
+        Call<List<UserEvent>> call = apiService.getEventUsers(evento.getId());
+
+        call.enqueue(new Callback<List<UserEvent>>() {
+            @Override
+            public void onResponse(Call<List<UserEvent>> call, Response<List<UserEvent>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    adapter.setEventUsers(evento.getId(), response.body());
+                } else if (response.code() == 404) {
+                    adapter.setLoadingUsers(evento.getId(), false);
+                    adapter.collapseExpandedEvent();
+                    Toast.makeText(EventosActivity.this,
+                            "Evento no encontrado",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Log.e("EventosActivity", "Error getEventUsers: " + response.code());
+                    adapter.setLoadingUsers(evento.getId(), false);
+                    adapter.collapseExpandedEvent();
+                    Toast.makeText(EventosActivity.this,
+                            "Error cargando inscritos: " + response.code(),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserEvent>> call, Throwable t) {
+                Log.e("EventosActivity", "onFailure getEventUsers", t);
+                adapter.setLoadingUsers(evento.getId(), false);
+                adapter.collapseExpandedEvent();
+                Toast.makeText(EventosActivity.this,
+                        "Fallo al cargar inscritos: " + t.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });
