@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título"
+        android:textSize="14sp"
+        android:textColor="#94A3B8"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etTopicTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ej: Estrategias avanzadas"
+        android:inputType="text"
+        android:maxLines="1"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descripción (opcional)"
+        android:textSize="14sp"
+        android:textColor="#94A3B8"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etTopicDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="De qué trata esta temática..."
+        android:inputType="textMultiLine"
+        android:minLines="2"
+        android:maxLines="4"
+        android:gravity="top" />
+
+</LinearLayout>

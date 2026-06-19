@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,7 +65,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
         holder.btnJoin.setOnClickListener(v -> {
             ApiService api = RetrofitClient.getInstance().getApi();
             if (isMyTeam) {
-                leaveTeam(api);
+                leaveTeam(api, team.getName());
             } else {
                 joinTeam(api, team.getName());
             }
@@ -80,25 +81,37 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
         api.joinTeam(teamName, username).enqueue(new Callback<Team>() {
             @Override
             public void onResponse(Call<Team> call, Response<Team> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Te has unido a " + teamName, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Error al unirse: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
                 reloadRanking();
             }
 
             @Override
             public void onFailure(Call<Team> call, Throwable t) {
+                Toast.makeText(context, "Fallo de red", Toast.LENGTH_SHORT).show();
                 reloadRanking();
             }
         });
     }
 
-    private void leaveTeam(ApiService api) {
+    private void leaveTeam(ApiService api, String teamName) {
         api.leaveTeam(username).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Has abandonado el equipo " + teamName, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Error al abandonar: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
                 reloadRanking();
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context, "Fallo de red", Toast.LENGTH_SHORT).show();
                 reloadRanking();
             }
         });

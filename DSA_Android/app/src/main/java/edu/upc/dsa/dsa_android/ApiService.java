@@ -34,5 +34,11 @@ public interface ApiService {
 
     @POST("game/events/{id}/register")
     Call<Void> registerEvento(@Path("id") String id, @Body RegistroEventoRequest request);
-}
 
+    // ── Foro ──────────────────────────────────────────────────────────────────
+    @GET("forum/topics")
+    Call<List<ForumTopic>> getForumTopics();
+
+    @POST("forum/topics")
+    Call<ForumTopic> createForumTopic(@Body CreateForumTopicRequest request);
+}

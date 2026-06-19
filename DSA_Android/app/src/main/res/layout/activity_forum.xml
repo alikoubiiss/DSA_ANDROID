@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tower_bg"
+    tools:context=".ForumActivity">
+
+    <!-- Overlay oscuro -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#AA0F172A"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/headerForum"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="#CC0F172A"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="💬  FORO"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#FBBF24"
+            android:fontFamily="sans-serif-medium" />
+
+        <Button
+            android:id="@+id/btnNewTopic"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:background="@drawable/td_button_green"
+            android:text="+ Nueva"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp" />
+
+    </LinearLayout>
+
+    <!-- RecyclerView con temáticas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerForum"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="12dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@+id/headerForum"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- ProgressBar -->
+    <ProgressBar
+        android:id="@+id/progressBarForum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/headerForum"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

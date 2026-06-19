@@ -122,7 +122,19 @@
             android:text="⚡  EVENTOS / RANKING / EQUIPO"
             android:textColor="#FBBF24"
             android:textStyle="bold"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- FORO -->
+        <Button
+            android:id="@+id/buttonForo"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/td_card_bg"
+            android:text="💬  FORO"
+            android:textColor="#FBBF24"
+            android:textStyle="bold"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

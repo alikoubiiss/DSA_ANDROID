@@ -66,6 +66,11 @@
             android:name=".Faq.FaqAssistantActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ForumActivity"
+            android:exported="false" />
+
+
     </application>
 
 </manifest>
