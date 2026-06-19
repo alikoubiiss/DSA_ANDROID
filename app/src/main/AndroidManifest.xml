@@ -68,6 +68,9 @@
         <activity
             android:name=".ForumActivity"
             android:exported="false" />
+        <activity
+            android:name=".MensajesActivity"
+            android:exported="false" />
 
 
     </application>

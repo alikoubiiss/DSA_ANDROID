@@ -37,6 +37,13 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ViewHolder> 
                 ? topic.getCreatedAt().substring(0, 10) : "";
         holder.tvDate.setText(date);
         holder.tvMsgCount.setText(topic.getMessageCount() + " mensajes");
+
+        holder.itemView.setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(v.getContext(), MensajesActivity.class);
+            intent.putExtra("topicId", topic.getId());
+            intent.putExtra("topicTitle", topic.getTitle());
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override
