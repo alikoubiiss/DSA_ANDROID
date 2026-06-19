@@ -36,7 +36,7 @@ public class ExtrasActivity extends AppCompatActivity {
         ForoButton = findViewById(R.id.ForoButton);
 
         EquiposButton.setOnClickListener(v ->
-                runLoadingAnimation(() -> startActivity(new Intent(ExtrasActivity.this, RankingActivity.class)))
+                runLoadingAnimation(() -> startActivity(new Intent(ExtrasActivity.this, TeamsActivity.class)))
         );
 
         EventosButton.setOnClickListener(v ->

@@ -8,10 +8,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
+
 import edu.upc.dsa.dsa_android.network.ApiService;
 import edu.upc.dsa.dsa_android.network.RetrofitClient;
 import retrofit2.Call;
@@ -20,15 +24,15 @@ import retrofit2.Response;
 
 public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
 
-    private List<Team> data;
-    private Context context;
-    private String myUsername;
-    private String myTeamName;
+    private final List<Team> data;
+    private final Context context;
+    private final String username;
+    private final String myTeamName;
 
     public TeamAdapter(List<Team> data, Context context, String username, String myTeamName) {
         this.data = data;
         this.context = context;
-        this.myUsername = username;
+        this.username = username;
         this.myTeamName = myTeamName;
     }
 
@@ -41,16 +45,15 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Team t = data.get(position);
-        holder.tvName.setText(t.getName());
-        holder.tvPoints.setText(t.getPoints() + " pts");
+        Team team = data.get(position);
+        holder.tvName.setText(team.getName());
+        holder.tvPoints.setText(team.getPoints() + " pts");
 
-        if (t.getAvatar() != null && !t.getAvatar().isEmpty()) {
-            Picasso.get().load(t.getAvatar()).into(holder.ivAvatar);
+        if (team.getAvatar() != null && !team.getAvatar().isEmpty()) {
+            Picasso.get().load(team.getAvatar()).into(holder.ivAvatar);
         }
 
-        boolean isMyTeam = (myTeamName != null && myTeamName.equals(t.getName()));
-
+        boolean isMyTeam = myTeamName != null && myTeamName.equals(team.getName());
         if (isMyTeam) {
             holder.btnJoin.setText("ABANDONAR");
             holder.btnJoin.setBackgroundResource(R.drawable.td_button_red);
@@ -61,52 +64,64 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
 
         holder.btnJoin.setOnClickListener(v -> {
             ApiService api = RetrofitClient.getInstance().getApi();
-
             if (isMyTeam) {
-                api.leaveTeam(myUsername).enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(context, "Has abandonado el equipo " + t.getName(), Toast.LENGTH_SHORT).show();
-                            if (context instanceof RankingActivity) {
-                                ((RankingActivity) context).loadRanking();
-                            }
-                        } else {
-                            Toast.makeText(context, "Error al abandonar: " + response.code(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(context, "Fallo de red", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                leaveTeam(api, team.getName());
             } else {
-                api.joinTeam(t.getName(), myUsername).enqueue(new Callback<Team>() {
-                    @Override
-                    public void onResponse(Call<Team> call, Response<Team> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(context, "Te has unido a " + t.getName(), Toast.LENGTH_SHORT).show();
-                            if (context instanceof RankingActivity) {
-                                ((RankingActivity) context).loadRanking();
-                            }
-                        } else {
-                            Toast.makeText(context, "Error al unirse: " + response.code(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Team> call, Throwable t) {
-                        Toast.makeText(context, "Fallo de red", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                joinTeam(api, team.getName());
             }
         });
     }
 
-
     @Override
-    public int getItemCount() { return data.size(); }
+    public int getItemCount() {
+        return data.size();
+    }
+
+    private void joinTeam(ApiService api, String teamName) {
+        api.joinTeam(teamName, username).enqueue(new Callback<Team>() {
+            @Override
+            public void onResponse(Call<Team> call, Response<Team> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Te has unido a " + teamName, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Error al unirse: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+                reloadRanking();
+            }
+
+            @Override
+            public void onFailure(Call<Team> call, Throwable t) {
+                Toast.makeText(context, "Fallo de red", Toast.LENGTH_SHORT).show();
+                reloadRanking();
+            }
+        });
+    }
+
+    private void leaveTeam(ApiService api, String teamName) {
+        api.leaveTeam(username).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Has abandonado el equipo " + teamName, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Error al abandonar: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+                reloadRanking();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context, "Fallo de red", Toast.LENGTH_SHORT).show();
+                reloadRanking();
+            }
+        });
+    }
+
+    private void reloadRanking() {
+        if (context instanceof TeamsActivity) {
+            ((TeamsActivity) context).loadRanking();
+        }
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvPoints;
