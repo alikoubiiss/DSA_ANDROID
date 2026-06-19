@@ -34,7 +34,7 @@ public class ExtrasActivity extends AppCompatActivity {
         btnVolver = findViewById(R.id.btnVolver);
 
         EquiposButton.setOnClickListener(v ->
-                runLoadingAnimation(() -> startActivity(new Intent(ExtrasActivity.this, RankingActivity.class)))
+                runLoadingAnimation(() -> startActivity(new Intent(ExtrasActivity.this, TeamsActivity.class)))
         );
 
         EventosButton.setOnClickListener(v ->

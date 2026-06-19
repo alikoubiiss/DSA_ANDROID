@@ -12,6 +12,7 @@ import edu.upc.dsa.dsa_android.LoginRequest;
 import edu.upc.dsa.dsa_android.Purchase;
 import edu.upc.dsa.dsa_android.RegisterRequest;
 import edu.upc.dsa.dsa_android.RegistroEventoRequest;
+import edu.upc.dsa.dsa_android.Team;
 import edu.upc.dsa.dsa_android.User;
 import edu.upc.dsa.dsa_android.UserEvent;
 import edu.upc.dsa.dsa_android.TeamInfoResponse;
@@ -84,8 +85,20 @@ public interface ApiService {
     @GET("game/events/{eventId}/users")
     Call<List<UserEvent>> getEventUsers(@Path("eventId") int eventId);
 
+    @GET("teams/ranking")
+    Call<List<Team>> getTeamsRanking();
+
+    @PUT("teams/join/{teamName}/{userName}")
+    Call<Team> joinTeam(@Path("teamName") String teamName, @Path("userName") String username);
+
+    @DELETE("teams/leave/{userName}")
+    Call<Void> leaveTeam(@Path("userName") String username);
+
     @GET("game/user/{username}/team")
     Call<TeamInfoResponse> getMyTeamInfo(@Path("username") String username);
+
+    @GET("teams/user/{userName}/team")
+    Call<TeamInfoResponse> getTeamMembership(@Path("userName") String username);
 
     /** POST /game/assistant/faq */
     @POST("game/assistant/faq")
