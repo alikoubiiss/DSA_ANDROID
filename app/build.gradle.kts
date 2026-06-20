@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "edu.upc.dsa.dsa_android"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -26,8 +26,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
     lint {
         abortOnError = false
@@ -55,4 +61,7 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("androidx.core:core-splashscreen:1.0.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+
+    // Unity as a Library
+    implementation(project(":unityLibrary"))
 }

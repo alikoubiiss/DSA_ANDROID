@@ -85,31 +85,34 @@ public class InicioLoginActivity extends AppCompatActivity {
             runLoadingAnimation(() -> startActivity(intent));
         });
 
+        // ── Botón JUGAR → abre el juego Unity embebido ────────────────────────
         buttonJugar.setOnClickListener(v -> {
             SharedPreferences sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
             String username = sharedPreferences.getString("username", "");
-            String packageName = "com.UnityTechnologies.com.unity.template.urpblank";
 
             if (!username.isEmpty()) {
                 runLoadingAnimation(() -> {
-                    Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
-                    if (intent != null) {
-                        intent.putExtra("USERNAME", username);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        try {
-                            startActivity(intent);
-                            Toast.makeText(this, "Abriendo juego...", Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            Toast.makeText(this, "Error al abrir: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        Toast.makeText(this, "El juego no está instalado. Verifica el nombre del paquete.", Toast.LENGTH_LONG).show();
-                    }
+                    Intent intent = new Intent(InicioLoginActivity.this, UnityGameActivity.class);
+                    startActivityForResult(intent, UnityGameActivity.REQUEST_CODE);
                 });
             } else {
                 Toast.makeText(this, "Error: No hay usuario logueado", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // ── Resultado al volver del juego Unity ───────────────────────────────────
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == UnityGameActivity.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            int coinsEarned = data.getIntExtra("coinsEarned", 0);
+            if (coinsEarned > 0) {
+                Toast.makeText(this,
+                    "¡Has ganado " + coinsEarned + " monedas!", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void runLoadingAnimation(Runnable onCompleteAction) {
@@ -120,7 +123,7 @@ public class InicioLoginActivity extends AppCompatActivity {
             loadingOverlay.setVisibility(android.view.View.VISIBLE);
 
             ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", 0, 100);
-            animator.setDuration(1200); // 1.2 segundos para llenar la barra
+            animator.setDuration(1200);
             animator.setInterpolator(new DecelerateInterpolator());
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
@@ -135,3 +138,4 @@ public class InicioLoginActivity extends AppCompatActivity {
         }
     }
 }
+
