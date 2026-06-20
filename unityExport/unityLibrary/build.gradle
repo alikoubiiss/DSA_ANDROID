@@ -12,7 +12,6 @@ dependencies {
 
 android {
     namespace "com.unity3d.player"
-    ndkPath "C:/Program Files/Unity/Hub/Editor/6000.3.10f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK"
     ndkVersion "27.2.12479018"
     compileSdk 36
     buildToolsVersion = "36.0.0"
@@ -106,7 +105,7 @@ android {
             def mergeTaskName = "merge${variant.name.capitalize()}JniLibFolders"
             def mergeTask = tasks.findByName(mergeTaskName)
             if (mergeTask != null) {
-                mergeTask.dependsOn buildIl2Cpp
+                // mergeTask.dependsOn buildIl2Cpp
             }
         }
     }

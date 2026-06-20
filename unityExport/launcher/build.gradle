@@ -9,7 +9,6 @@ dependencies {
 
 android {
     namespace "com.UnityTechnologies.com.unity.template.urpblank"
-    ndkPath "C:/Program Files/Unity/Hub/Editor/6000.3.10f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK"
     ndkVersion "27.2.12479018"
     compileSdk 36
     buildToolsVersion = "36.0.0"
