@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="6dp"
+    android:padding="12dp"
+    android:background="@drawable/td_card_bg">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp">
+
+        <TextView
+            android:id="@+id/tvMessageAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NombreUsuario"
+            android:textStyle="bold"
+            android:textColor="#FBBF24"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvMessageTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="2026-06-19 16:30"
+            android:textColor="#94A3B8"
+            android:textSize="11sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvMessageContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Contenido del mensaje..."
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
+
+</LinearLayout>

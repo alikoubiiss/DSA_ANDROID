@@ -10,6 +10,10 @@ import edu.upc.dsa.dsa_android.User;
 import edu.upc.dsa.dsa_android.UserEvent;
 import edu.upc.dsa.dsa_android.Team;
 import edu.upc.dsa.dsa_android.TeamInfoResponse;
+import edu.upc.dsa.dsa_android.ForumTopic;
+import edu.upc.dsa.dsa_android.CreateForumTopicRequest;
+import edu.upc.dsa.dsa_android.ForumMessage;
+import edu.upc.dsa.dsa_android.CreateForumMessageRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -61,4 +65,23 @@ public interface ApiService {
 
     @DELETE("teams/leave/{userName}")
     Call<Void> leaveTeam(@Path("userName") String userName);
+
+    // ── Foro ──────────────────────────────────────────────────────────────────
+    @GET("forum/topics")
+    Call<List<ForumTopic>> getForumTopics();
+
+    @POST("forum/topics")
+    Call<ForumTopic> createForumTopic(@Body CreateForumTopicRequest request);
+
+    @GET("forum/topics/{id}/messages")
+    Call<List<ForumMessage>> getForumMessages(@Path("id") int topicId);
+
+    @POST("forum/topics/{id}/messages")
+    Call<ForumMessage> createForumMessage(@Path("id") int topicId, @Body CreateForumMessageRequest request);
+
+    @POST("api/game/coins/earn")
+    Call<edu.upc.dsa.dsa_android.EarnCoinsResponse> earnCoins(@Body edu.upc.dsa.dsa_android.EarnCoinsRequest request);
+
+    @GET("game/users/{userId}")
+    Call<User> getUserById(@Path("userId") int userId);
 }

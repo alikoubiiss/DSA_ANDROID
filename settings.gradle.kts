@@ -12,12 +12,20 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
+        // Repositorio local para los .aar de Unity
+        flatDir {
+            dirs("${rootDir}/unityExport/unityLibrary/libs")
+        }
     }
 }
 
 rootProject.name = "dsa_android"
 include(":app")
+
+// Módulo Unity exportado
+include(":unityLibrary")
+project(":unityLibrary").projectDir = file("unityExport/unityLibrary")
