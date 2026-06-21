@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -38,12 +39,14 @@ public class ForumActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerForum);
         progressBar = findViewById(R.id.progressBarForum);
         btnNewTopic  = findViewById(R.id.btnNewTopic);
+        ImageButton btnBack = findViewById(R.id.btnBackForum);
 
         adapter = new ForumAdapter(topicList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
         btnNewTopic.setOnClickListener(v -> showCreateTopicDialog());
+        btnBack.setOnClickListener(v -> finish());
 
         loadTopics();
     }
