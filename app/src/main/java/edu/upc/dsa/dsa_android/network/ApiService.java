@@ -15,12 +15,9 @@ import edu.upc.dsa.dsa_android.RegistroEventoRequest;
 import edu.upc.dsa.dsa_android.User;
 import edu.upc.dsa.dsa_android.UserEvent;
 import edu.upc.dsa.dsa_android.TeamInfoResponse;
-<<<<<<< HEAD
 import edu.upc.dsa.dsa_android.ForumTopic;
 import edu.upc.dsa.dsa_android.CreateForumTopicRequest;
-=======
 import edu.upc.dsa.dsa_android.Team;
->>>>>>> 3908cffb7067d51d30eeba5fec50b4cb7561c3eb
 import okhttp3.ResponseBody;
 
 import retrofit2.Call;
@@ -97,14 +94,14 @@ public interface ApiService {
     @POST("game/assistant/faq")
     Call<FaqAssistantResponse> askFaq(@Body FaqAssistantRequest request);
 
-<<<<<<< HEAD
+
     // ── FORO ──────────────────────────────────────────────────────────────────
     @GET("forum/topics")
     Call<List<ForumTopic>> getForumTopics();
 
     @POST("forum/topics")
     Call<ForumTopic> createForumTopic(@Body CreateForumTopicRequest request);
-=======
+
     @GET("teams/ranking")
     Call<List<Team>> getTeamsRanking();
 
@@ -113,6 +110,5 @@ public interface ApiService {
 
     @DELETE("teams/leave/{userName}")
     Call<Void> leaveTeam(@Path("userName") String userName);
->>>>>>> 3908cffb7067d51d30eeba5fec50b4cb7561c3eb
 }
 

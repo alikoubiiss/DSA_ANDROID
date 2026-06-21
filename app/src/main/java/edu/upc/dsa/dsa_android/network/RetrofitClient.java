@@ -9,11 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-<<<<<<< HEAD
-    private static final String BASE_URL = "http://192.168.1.107:8080/dsaApp/";
-=======
-    private static final String BASE_URL = "http://10.0.2.2:8080/dsaApp/";
->>>>>>> 3908cffb7067d51d30eeba5fec50b4cb7561c3eb
+    private static final String BASE_URL = "http://dsa3.upc.edu/dsaApp/";
+
 
     private static RetrofitClient instance;
     private final ApiService apiService;
