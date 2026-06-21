@@ -78,4 +78,10 @@ public interface ApiService {
 
     @POST("forum/topics/{id}/messages")
     Call<ForumMessage> createForumMessage(@Path("id") int topicId, @Body CreateForumMessageRequest request);
+
+    @POST("api/game/coins/earn")
+    Call<edu.upc.dsa.dsa_android.EarnCoinsResponse> earnCoins(@Body edu.upc.dsa.dsa_android.EarnCoinsRequest request);
+
+    @GET("game/users/{userId}")
+    Call<User> getUserById(@Path("userId") int userId);
 }

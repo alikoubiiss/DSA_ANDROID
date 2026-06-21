@@ -81,7 +81,36 @@ public class TiendaActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        actualizarSaldoUI();
+        refreshSaldoFromServer();
+    }
+
+    private void refreshSaldoFromServer() {
+        int userId = sharedPreferences.getInt("userId", -1);
+        if (userId == -1) {
+            actualizarSaldoUI();
+            return;
+        }
+
+        apiService.getUserById(userId).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    double saldo = response.body().getSaldo();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putFloat("saldo", (float) saldo);
+                    editor.apply();
+                    actualizarSaldoUI();
+                } else {
+                    actualizarSaldoUI();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e("TiendaActivity", "Fallo al refrescar saldo", t);
+                actualizarSaldoUI();
+            }
+        });
     }
 
     private void cargarTienda() {

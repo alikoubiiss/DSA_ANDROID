@@ -55,13 +55,16 @@ public class UnityGameActivity extends UnityPlayerGameActivity {
         // Enviar el username al juego una vez que Unity haya cargado.
         // Usamos un pequeño delay para asegurar que la escena está lista.
         if (!username.isEmpty()) {
-            new Handler(Looper.getMainLooper()).postDelayed(() ->
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                // TowerUpgradeManager es el GameObject que existe en Unity y tiene SetUserId()
+                // Esto hace que PlayerSession.UserId = username para que las monedas se guarden bien
                 UnityPlayer.UnitySendMessage(
-                    "AndroidBridge",   // Nombre del GameObject en Unity
-                    "SetUserName",     // Método C# del script en ese GameObject
+                    "TowerUpgradeManager", // GameObject creado por RuntimeInitializeOnLoadMethod
+                    "SetUserId",           // Llama a PlayerSession.UserId = userId
                     username
-                ), 2000 // 2 segundos de margen para que cargue la escena
-            );
+                );
+                Log.d(TAG, "Username enviado a Unity: " + username);
+            }, 2000);
         }
     }
 
@@ -107,23 +110,16 @@ public class UnityGameActivity extends UnityPlayerGameActivity {
     // ── Lógica interna ────────────────────────────────────────────────────────
 
     private void saveCoinsToBackend(int coins) {
-        // Usamos el endpoint de coins del backend
-        // Ajusta el endpoint y el request body según tu ApiService
-        Log.d(TAG, "Enviando " + coins + " monedas al backend para userId=" + userId);
+        Log.d(TAG, "Enviando " + coins + " monedas al backend para usuario=" + username);
 
-        // TODO: cuando el backend tenga el endpoint de sumar monedas, descomentar:
-        /*
-        EarnCoinsRequest request = new EarnCoinsRequest(userId, coins);
+        EarnCoinsRequest request = new EarnCoinsRequest(username, coins);
         apiService.earnCoins(request).enqueue(new Callback<EarnCoinsResponse>() {
             @Override
             public void onResponse(Call<EarnCoinsResponse> call, Response<EarnCoinsResponse> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     Log.d(TAG, "Monedas guardadas correctamente en el backend");
-                    // Actualizar SharedPreferences con el nuevo saldo
-                    if (response.body() != null) {
-                        SharedPreferences prefs = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
-                        prefs.edit().putFloat("saldo", (float) response.body().getNewBalance()).apply();
-                    }
+                    SharedPreferences prefs = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
+                    prefs.edit().putFloat("saldo", (float) response.body().getNewBalance()).apply();
                 } else {
                     Log.e(TAG, "Error guardando monedas: " + response.code());
                 }
@@ -133,12 +129,5 @@ public class UnityGameActivity extends UnityPlayerGameActivity {
                 Log.e(TAG, "Fallo de red al guardar monedas", t);
             }
         });
-        */
-
-        // Por ahora, actualiza el saldo localmente en SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
-        float currentBalance = prefs.getFloat("saldo", 0f);
-        prefs.edit().putFloat("saldo", currentBalance + coins).apply();
-        Log.d(TAG, "Saldo local actualizado: " + (currentBalance + coins));
     }
 }
