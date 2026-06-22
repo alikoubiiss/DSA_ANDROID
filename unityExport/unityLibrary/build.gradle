@@ -12,7 +12,7 @@ dependencies {
 
 android {
     namespace "com.unity3d.player"
-    ndkPath "C:/Program Files/Unity/Hub/Editor/6000.3.10f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK"
+    ndkPath getProperty("unity.androidNdkPath")
     ndkVersion "27.2.12479018"
     compileSdk 36
     buildToolsVersion = "36.0.0"
@@ -84,18 +84,26 @@ android {
             outputs.file getIl2CppSymbolPath(workingDir, abi)
         }
         doLast {
-            // skipIl2CppBuild used for testing purposes
-            if (project.hasProperty("skipIl2CppBuild")) {
-                println("Skipping il2cpp build, creating dummy files.")
-                archs.each { arch, abi ->
-                    {
-                        file(getIl2CppOutputPath(workingDir, abi)).write("DummyBinary")
-                        file(getIl2CppSymbolPath(workingDir, abi)).write("DummySymbols")
-                    }}
-            }
-            else {
-                archs.each { arch, abi ->
-                    buildIl2CppImpl(workingDir, 'Release', arch, abi, staticLibs[arch] as String[]);
+            archs.each { arch, abi ->
+                def outputSo = file(getIl2CppOutputPath(workingDir, abi))
+                // Si el .so ya existe (exportado por Unity), úsalo directamente
+                if (outputSo.exists() && outputSo.length() > 1024) {
+                    println("IL2CPP already compiled for ${abi} (${outputSo.length()} bytes), skipping build.")
+                    // Asegurar que el archivo de símbolos existe
+                    def symbolFile = file(getIl2CppSymbolPath(workingDir, abi))
+                    if (!symbolFile.exists()) {
+                        symbolFile.parentFile.mkdirs()
+                        symbolFile.bytes = outputSo.bytes
+                    }
+                } else if (project.hasProperty("skipIl2CppBuild")) {
+                    println("Skipping il2cpp build (skipIl2CppBuild=true), creating dummy files.")
+                    outputSo.parentFile.mkdirs()
+                    outputSo.write("DummyBinary")
+                    def symbolFile = file(getIl2CppSymbolPath(workingDir, abi))
+                    symbolFile.parentFile.mkdirs()
+                    symbolFile.write("DummySymbols")
+                } else {
+                    buildIl2CppImpl(workingDir, 'Release', arch, abi, staticLibs[arch] as String[])
                 }
             }
         }
