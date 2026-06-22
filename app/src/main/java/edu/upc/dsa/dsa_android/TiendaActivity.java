@@ -22,7 +22,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import edu.upc.dsa.dsa_android.network.ApiService;
 import edu.upc.dsa.dsa_android.network.RetrofitClient;
@@ -31,6 +34,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TiendaActivity extends AppCompatActivity {
+
+    private static final Set<String> EXCLUDED_SHOP_ASSETS = Set.of(
+            "repair_kit",
+            "wall_upgrade"
+    );
 
     Button btnBackToInicioLogin;
     TextView tvMonedas;
@@ -123,7 +131,7 @@ public class TiendaActivity extends AppCompatActivity {
                 ProgressBarActivity.hide(PB);
 
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Item> items = response.body();
+                    List<Item> items = filterShopItems(response.body());
                     adapter = new TiendaAdapter(TiendaActivity.this, items, item -> handleCompra(item));
                     recyclerViewTienda.setAdapter(adapter);
                 } else {
@@ -141,6 +149,35 @@ public class TiendaActivity extends AppCompatActivity {
                 Log.e("TiendaActivity", "onFailure", t);
             }
         });
+    }
+
+    private List<Item> filterShopItems(List<Item> items) {
+        List<Item> visibleItems = new ArrayList<>();
+        for (Item item : items) {
+            if (!isExcludedFromShop(item)) {
+                visibleItems.add(item);
+            }
+        }
+        return visibleItems;
+    }
+
+    private boolean isExcludedFromShop(Item item) {
+        String asset = item.getAssetName();
+        if (asset != null) {
+            String normalizedAsset = asset.toLowerCase(Locale.ROOT).replace(".png", "");
+            if (EXCLUDED_SHOP_ASSETS.contains(normalizedAsset)) {
+                return true;
+            }
+        }
+
+        String name = item.getName();
+        if (name == null) {
+            return false;
+        }
+
+        String normalizedName = name.toLowerCase(Locale.ROOT);
+        return normalizedName.contains("kit de reparacion")
+                || normalizedName.contains("refuerzo de muralla");
     }
 
     private void handleCompra(Item item) {
